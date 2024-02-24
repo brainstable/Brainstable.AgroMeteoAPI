@@ -1,0 +1,6 @@
+@Brainstable.AgroMeteoAPI_HostAddress = http://localhost:5069
+
+GET {{Brainstable.AgroMeteoAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
