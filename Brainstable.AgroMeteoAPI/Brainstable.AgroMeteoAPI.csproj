@@ -7,4 +7,8 @@
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Brainstable.AgroMeteoAPI.LoggerService\Brainstable.AgroMeteoAPI.LoggerService.csproj" />
+  </ItemGroup>
+
 </Project>
