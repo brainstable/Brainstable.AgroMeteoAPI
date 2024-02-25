@@ -23,7 +23,7 @@ namespace Brainstable.AgroMeteoAPI.Repository
                 entity.HasKey(e => new { e.MeteoStationId, e.Date });
             });
 
-            //modelBuilder.ApplyConfiguration(new MeteoStationConfiguration());
+            modelBuilder.ApplyConfiguration(new MeteoStationConfiguration());
         }
     }
 }

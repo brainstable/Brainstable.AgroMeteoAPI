@@ -34,7 +34,7 @@ namespace Brainstable.AgroMeteoAPI.Repository.Configuration
                     Latitude = !string.IsNullOrWhiteSpace(arr[2]) ? Convert.ToDouble(arr[2].Replace('.', ',')) : null,
                     Longitude = !string.IsNullOrWhiteSpace(arr[3]) ? Convert.ToDouble(arr[3].Replace('.', ',')) : null,
                     Altitude = !string.IsNullOrWhiteSpace(arr[4]) ? Convert.ToDouble(arr[4].Replace('.', ',')) : null,
-                    Country = !string.IsNullOrWhiteSpace(arr[5]) ? arr[5] : null,
+                    Country = "Россия",
                     NameRus = !string.IsNullOrWhiteSpace(arr[6]) ? arr[6] : null,
                     NameEng = !string.IsNullOrWhiteSpace(arr[7]) ? arr[7] : null,
                 };

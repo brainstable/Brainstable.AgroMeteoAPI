@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Brainstable.AgroMeteoAPI.Contracts\Brainstable.AgroMeteoAPI.Contracts.csproj" />
     <ProjectReference Include="..\Brainstable.AgroMeteoAPI.Entities\Brainstable.AgroMeteoAPI.Entities.csproj" />
   </ItemGroup>
 
