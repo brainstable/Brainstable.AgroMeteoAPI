@@ -1,13 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace Brainstable.AgroMeteoAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateTables : Migration
+    public partial class CreateDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,15 +15,14 @@ namespace Brainstable.AgroMeteoAPI.Migrations
                 name: "meteo_stations",
                 columns: table => new
                 {
-                    meteo_station_id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    meteo_station_id = table.Column<string>(type: "character varying(6)", maxLength: 6, nullable: false),
                     name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     lat = table.Column<double>(type: "double precision", nullable: true),
                     lon = table.Column<double>(type: "double precision", nullable: true),
                     alt = table.Column<double>(type: "double precision", nullable: true),
                     name_rus = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     name_eng = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    country_alpha_2 = table.Column<string>(type: "text", nullable: true)
+                    country = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -32,10 +30,10 @@ namespace Brainstable.AgroMeteoAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "meteo_days",
+                name: "meteo_points",
                 columns: table => new
                 {
-                    meteo_station_id = table.Column<int>(type: "integer", nullable: false),
+                    meteo_station_id = table.Column<string>(type: "character varying(6)", nullable: false),
                     date = table.Column<DateOnly>(type: "date", nullable: false),
                     t = table.Column<double>(type: "double precision", nullable: true),
                     tmin = table.Column<double>(type: "double precision", nullable: true),
@@ -46,9 +44,9 @@ namespace Brainstable.AgroMeteoAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_meteo_days", x => new { x.meteo_station_id, x.date });
+                    table.PrimaryKey("PK_meteo_points", x => new { x.meteo_station_id, x.date });
                     table.ForeignKey(
-                        name: "FK_meteo_days_meteo_stations_meteo_station_id",
+                        name: "FK_meteo_points_meteo_stations_meteo_station_id",
                         column: x => x.meteo_station_id,
                         principalTable: "meteo_stations",
                         principalColumn: "meteo_station_id",
@@ -60,7 +58,7 @@ namespace Brainstable.AgroMeteoAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "meteo_days");
+                name: "meteo_points");
 
             migrationBuilder.DropTable(
                 name: "meteo_stations");

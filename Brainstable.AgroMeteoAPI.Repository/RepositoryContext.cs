@@ -8,7 +8,7 @@ namespace Brainstable.AgroMeteoAPI.Repository
     public class RepositoryContext : DbContext
     {
         public DbSet<MeteoStation>? MeteoStations { get; set; }
-        public DbSet<MeteoDay>? MeteoDays { get; set; }
+        public DbSet<MeteoPoint>? MeteoPoints { get; set; }
 
         public RepositoryContext(DbContextOptions options)
             : base(options)
@@ -18,12 +18,12 @@ namespace Brainstable.AgroMeteoAPI.Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MeteoDay>(entity =>
+            modelBuilder.Entity<MeteoPoint>(entity =>
             {
                 entity.HasKey(e => new { e.MeteoStationId, e.Date });
             });
 
-            modelBuilder.ApplyConfiguration(new MeteoStationConfiguration());
+            //modelBuilder.ApplyConfiguration(new MeteoStationConfiguration());
         }
     }
 }

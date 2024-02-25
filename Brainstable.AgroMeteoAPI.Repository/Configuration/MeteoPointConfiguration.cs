@@ -5,9 +5,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Brainstable.AgroMeteoAPI.Repository.Configuration
 {
-    internal class MeteoDayConfiguration : IEntityTypeConfiguration<MeteoDay>
+    internal class MeteoPointConfiguration : IEntityTypeConfiguration<MeteoPoint>
     {
-        public void Configure(EntityTypeBuilder<MeteoDay> builder)
+        readonly string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "meteo_stations.csv");
+
+        public void Configure(EntityTypeBuilder<MeteoPoint> builder)
         {
             throw new NotImplementedException();
         }

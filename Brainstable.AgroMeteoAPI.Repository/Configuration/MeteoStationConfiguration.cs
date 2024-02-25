@@ -11,7 +11,6 @@ namespace Brainstable.AgroMeteoAPI.Repository.Configuration
     {
         readonly string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "meteo_stations.csv");
 
-
         public void Configure(EntityTypeBuilder<MeteoStation> builder)
         {
             IEnumerable<MeteoStation> meteoStations = LoadFromFile(filePath);
@@ -30,12 +29,12 @@ namespace Brainstable.AgroMeteoAPI.Repository.Configuration
 
                 MeteoStation meteoStation = new MeteoStation
                 {
-                    MeteoStationId = Convert.ToInt32(arr[0]),
+                    MeteoStationId = arr[0],
                     Name = arr[1],
                     Latitude = !string.IsNullOrWhiteSpace(arr[2]) ? Convert.ToDouble(arr[2].Replace('.', ',')) : null,
                     Longitude = !string.IsNullOrWhiteSpace(arr[3]) ? Convert.ToDouble(arr[3].Replace('.', ',')) : null,
                     Altitude = !string.IsNullOrWhiteSpace(arr[4]) ? Convert.ToDouble(arr[4].Replace('.', ',')) : null,
-                    CountryAlpha2 = !string.IsNullOrWhiteSpace(arr[5]) ? arr[5] : null,
+                    Country = !string.IsNullOrWhiteSpace(arr[5]) ? arr[5] : null,
                     NameRus = !string.IsNullOrWhiteSpace(arr[6]) ? arr[6] : null,
                     NameEng = !string.IsNullOrWhiteSpace(arr[7]) ? arr[7] : null,
                 };

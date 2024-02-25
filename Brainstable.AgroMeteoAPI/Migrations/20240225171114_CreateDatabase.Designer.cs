@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Brainstable.AgroMeteoAPI.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20240225090141_CreateTables")]
-    partial class CreateTables
+    [Migration("20240225171114_CreateDatabase")]
+    partial class CreateDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,10 +25,10 @@ namespace Brainstable.AgroMeteoAPI.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Brainstable.AgroMeteoAPI.Entities.Models.MeteoDay", b =>
+            modelBuilder.Entity("Brainstable.AgroMeteoAPI.Entities.Models.MeteoPoint", b =>
                 {
-                    b.Property<int>("MeteoStationId")
-                        .HasColumnType("integer")
+                    b.Property<string>("MeteoStationId")
+                        .HasColumnType("character varying(6)")
                         .HasColumnName("meteo_station_id");
 
                     b.Property<DateOnly>("Date")
@@ -61,25 +61,24 @@ namespace Brainstable.AgroMeteoAPI.Migrations
 
                     b.HasKey("MeteoStationId", "Date");
 
-                    b.ToTable("meteo_days");
+                    b.ToTable("meteo_points");
                 });
 
             modelBuilder.Entity("Brainstable.AgroMeteoAPI.Entities.Models.MeteoStation", b =>
                 {
-                    b.Property<int>("MeteoStationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                    b.Property<string>("MeteoStationId")
+                        .HasMaxLength(6)
+                        .HasColumnType("character varying(6)")
                         .HasColumnName("meteo_station_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("MeteoStationId"));
 
                     b.Property<double?>("Altitude")
                         .HasColumnType("double precision")
                         .HasColumnName("alt");
 
-                    b.Property<string>("CountryAlpha2")
-                        .HasColumnType("text")
-                        .HasColumnName("country_alpha_2");
+                    b.Property<string>("Country")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("country");
 
                     b.Property<double?>("Latitude")
                         .HasColumnType("double precision")
@@ -110,10 +109,10 @@ namespace Brainstable.AgroMeteoAPI.Migrations
                     b.ToTable("meteo_stations");
                 });
 
-            modelBuilder.Entity("Brainstable.AgroMeteoAPI.Entities.Models.MeteoDay", b =>
+            modelBuilder.Entity("Brainstable.AgroMeteoAPI.Entities.Models.MeteoPoint", b =>
                 {
                     b.HasOne("Brainstable.AgroMeteoAPI.Entities.Models.MeteoStation", "MeteoStation")
-                        .WithMany("MeteoDays")
+                        .WithMany("MeteoPoints")
                         .HasForeignKey("MeteoStationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -123,7 +122,7 @@ namespace Brainstable.AgroMeteoAPI.Migrations
 
             modelBuilder.Entity("Brainstable.AgroMeteoAPI.Entities.Models.MeteoStation", b =>
                 {
-                    b.Navigation("MeteoDays");
+                    b.Navigation("MeteoPoints");
                 });
 #pragma warning restore 612, 618
         }

@@ -7,7 +7,8 @@ namespace Brainstable.AgroMeteoAPI.Entities.Models
     public class MeteoStation
     {
         [Column("meteo_station_id")]
-        public int MeteoStationId { get; set; }
+        [MaxLength(6, ErrorMessage = "")]
+        public string MeteoStationId { get; set; }
 
         [Column("name")]
         [Required(ErrorMessage = "")]
@@ -31,10 +32,11 @@ namespace Brainstable.AgroMeteoAPI.Entities.Models
         [MaxLength(100, ErrorMessage = "")]
         public string? NameEng { get; set; }
 
-        [Column("country_alpha_2")]
-        public string? CountryAlpha2 { get; set; }
+        [Column("country")]
+        [MaxLength(50, ErrorMessage = "")]
+        public string? Country { get; set; }
 
-        public ICollection<MeteoDay> MeteoDays { get; set; }
+        public ICollection<MeteoPoint> MeteoPoints { get; set; }
 
         public override string ToString()
         {

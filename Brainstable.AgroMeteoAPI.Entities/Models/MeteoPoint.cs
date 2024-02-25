@@ -2,12 +2,12 @@
 
 namespace Brainstable.AgroMeteoAPI.Entities.Models
 {
-    [Table("meteo_days")]
-    public class MeteoDay
+    [Table("meteo_points")]
+    public class MeteoPoint
     {
         [Column("meteo_station_id")]
         [ForeignKey(nameof(MeteoStation))]
-        public int MeteoStationId { get; set; }
+        public string MeteoStationId { get; set; }
 
         public MeteoStation? MeteoStation { get; set; }
 
