@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Brainstable.AgroMeteoAPI.Entities.Models
 {
+    [Table("meteo_stations")]
     public class MeteoStation
     {
         [Column("meteo_station_id")]

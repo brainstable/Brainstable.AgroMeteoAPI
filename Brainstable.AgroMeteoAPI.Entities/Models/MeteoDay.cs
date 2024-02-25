@@ -2,6 +2,7 @@
 
 namespace Brainstable.AgroMeteoAPI.Entities.Models
 {
+    [Table("meteo_days")]
     public class MeteoDay
     {
         [Column("meteo_station_id")]

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brainstable.AgroMeteoAPI.Lo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brainstable.AgroMeteoAPI.Entities", "Brainstable.AgroMeteoAPI.Entities\Brainstable.AgroMeteoAPI.Entities.csproj", "{76534519-9506-4D08-A39E-8D8AE9AC9DE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brainstable.AgroMeteoAPI.Repository", "Brainstable.AgroMeteoAPI.Repository\Brainstable.AgroMeteoAPI.Repository.csproj", "{61DAAEE9-D467-4D46-BAD9-7C17835B51FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{76534519-9506-4D08-A39E-8D8AE9AC9DE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76534519-9506-4D08-A39E-8D8AE9AC9DE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76534519-9506-4D08-A39E-8D8AE9AC9DE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61DAAEE9-D467-4D46-BAD9-7C17835B51FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61DAAEE9-D467-4D46-BAD9-7C17835B51FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61DAAEE9-D467-4D46-BAD9-7C17835B51FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61DAAEE9-D467-4D46-BAD9-7C17835B51FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
