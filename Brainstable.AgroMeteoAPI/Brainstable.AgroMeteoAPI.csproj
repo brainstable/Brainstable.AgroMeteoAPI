@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Brainstable.AgroMeteoAPI.LoggerService\Brainstable.AgroMeteoAPI.LoggerService.csproj" />
+    <ProjectReference Include="..\Brainstable.AgroMeteoAPI.Presentation\Brainstable.AgroMeteoAPI.Presentation.csproj" />
     <ProjectReference Include="..\Brainstable.AgroMeteoAPI.Repository\Brainstable.AgroMeteoAPI.Repository.csproj" />
     <ProjectReference Include="..\Brainstable.AgroMeteoAPI.Service.Contracts\Brainstable.AgroMeteoAPI.Service.Contracts.csproj" />
     <ProjectReference Include="..\Brainstable.AgroMeteoAPI.Service\Brainstable.AgroMeteoAPI.Service.csproj" />

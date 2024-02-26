@@ -1,4 +1,5 @@
 ﻿using Brainstable.AgroMeteoAPI.Contracts;
+using Brainstable.AgroMeteoAPI.Entities.Models;
 using Brainstable.AgroMeteoAPI.Service.Contracts;
 
 namespace Brainstable.AgroMeteoAPI.Service
@@ -12,6 +13,21 @@ namespace Brainstable.AgroMeteoAPI.Service
         {
             this.repository = repository;
             this.logger = logger;
+        }
+
+        public IEnumerable<MeteoStation> GetAllMeteoStations(bool trackChanges)
+        {
+            try
+            {
+                var meteoStations = repository.MeteoStation.GetAllMeteoStations(trackChanges);
+                
+                return meteoStations;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Something went wrong in the {nameof(GetAllMeteoStations)} service method {ex}");
+                throw;
+            }
         }
     }
 }

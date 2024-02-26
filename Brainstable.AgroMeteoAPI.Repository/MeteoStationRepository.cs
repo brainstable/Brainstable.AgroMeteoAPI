@@ -9,5 +9,10 @@ namespace Brainstable.AgroMeteoAPI.Repository
             : base(repositoryContext)
         {
         }
+
+        public IEnumerable<MeteoStation> GetAllMeteoStations(bool trackChanges) =>
+            FindAll(trackChanges)
+                .OrderBy(x => x.Name)
+                .ToList();
     }
 }
