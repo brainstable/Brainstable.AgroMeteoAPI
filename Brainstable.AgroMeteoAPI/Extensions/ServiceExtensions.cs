@@ -4,6 +4,8 @@ using Brainstable.AgroMeteoAPI.Repository;
 using Brainstable.AgroMeteoAPI.Service;
 using Brainstable.AgroMeteoAPI.Service.Contracts;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Brainstable.AgroMeteoAPI.Extensions
 {
     public static class ServiceExtensions
@@ -31,5 +33,10 @@ namespace Brainstable.AgroMeteoAPI.Extensions
 
         public static void ConfigureServiceManager(this IServiceCollection services) =>
             services.AddScoped<IServiceManager, ServiceManager>();
+
+        public static void ConfigureSqlContext(this IServiceCollection services,
+            IConfiguration configuration) =>
+                services.AddDbContext<RepositoryContext>(opts =>
+                    opts.UseNpgsql(configuration.GetConnectionString("npgsqlConnection")));
     }
 }
