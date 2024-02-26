@@ -1,6 +1,8 @@
 ﻿using Brainstable.AgroMeteoAPI.Contracts;
 using Brainstable.AgroMeteoAPI.LoggerService;
 using Brainstable.AgroMeteoAPI.Repository;
+using Brainstable.AgroMeteoAPI.Service;
+using Brainstable.AgroMeteoAPI.Service.Contracts;
 
 namespace Brainstable.AgroMeteoAPI.Extensions
 {
@@ -26,5 +28,8 @@ namespace Brainstable.AgroMeteoAPI.Extensions
 
         public static void ConfigureRepositoryManager(this IServiceCollection services) =>
             services.AddScoped<IRepositoryManager, RepositoryManager>();
+
+        public static void ConfigureServiceManager(this IServiceCollection services) =>
+            services.AddScoped<IServiceManager, ServiceManager>();
     }
 }

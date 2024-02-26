@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brainstable.AgroMeteoAPI.En
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brainstable.AgroMeteoAPI.Repository", "Brainstable.AgroMeteoAPI.Repository\Brainstable.AgroMeteoAPI.Repository.csproj", "{61DAAEE9-D467-4D46-BAD9-7C17835B51FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brainstable.AgroMeteoAPI.Service.Contracts", "Brainstable.AgroMeteoAPI.Service.Contracts\Brainstable.AgroMeteoAPI.Service.Contracts.csproj", "{79E79FAA-A5F5-4080-B52E-92E1DB012A2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brainstable.AgroMeteoAPI.Service", "Brainstable.AgroMeteoAPI.Service\Brainstable.AgroMeteoAPI.Service.csproj", "{9FD00303-900A-4F23-A600-2262E1C97600}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{61DAAEE9-D467-4D46-BAD9-7C17835B51FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61DAAEE9-D467-4D46-BAD9-7C17835B51FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61DAAEE9-D467-4D46-BAD9-7C17835B51FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79E79FAA-A5F5-4080-B52E-92E1DB012A2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79E79FAA-A5F5-4080-B52E-92E1DB012A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79E79FAA-A5F5-4080-B52E-92E1DB012A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79E79FAA-A5F5-4080-B52E-92E1DB012A2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FD00303-900A-4F23-A600-2262E1C97600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FD00303-900A-4F23-A600-2262E1C97600}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FD00303-900A-4F23-A600-2262E1C97600}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FD00303-900A-4F23-A600-2262E1C97600}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
