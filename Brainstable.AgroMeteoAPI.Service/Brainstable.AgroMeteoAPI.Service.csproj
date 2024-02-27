@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Brainstable.AgroMeteoAPI.Contracts\Brainstable.AgroMeteoAPI.Contracts.csproj" />
     <ProjectReference Include="..\Brainstable.AgroMeteoAPI.Service.Contracts\Brainstable.AgroMeteoAPI.Service.Contracts.csproj" />
+    <ProjectReference Include="..\Brainstable.AgroMeteoAPI.Shared\Brainstable.AgroMeteoAPI.Shared.csproj" />
   </ItemGroup>
 
 </Project>

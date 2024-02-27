@@ -1,9 +1,9 @@
-﻿using Brainstable.AgroMeteoAPI.Entities.Models;
+﻿using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 
 namespace Brainstable.AgroMeteoAPI.Service.Contracts
 {
     public interface IMeteoStationService
     {
-        IEnumerable<MeteoStation> GetAllMeteoStations(bool trackChanges);
+        IEnumerable<MeteoStationDto> GetAllMeteoStations(bool trackChanges);
     }
 }

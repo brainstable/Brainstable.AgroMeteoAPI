@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 {
-    [Route("api/[meteostations]")]
+    [Route("api/meteostations")]
     [ApiController]
     public class MeteoStationController : ControllerBase
     {

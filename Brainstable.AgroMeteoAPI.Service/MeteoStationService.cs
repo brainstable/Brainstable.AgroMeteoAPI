@@ -1,6 +1,6 @@
 ﻿using Brainstable.AgroMeteoAPI.Contracts;
-using Brainstable.AgroMeteoAPI.Entities.Models;
 using Brainstable.AgroMeteoAPI.Service.Contracts;
+using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 
 namespace Brainstable.AgroMeteoAPI.Service
 {
@@ -15,13 +15,18 @@ namespace Brainstable.AgroMeteoAPI.Service
             this.logger = logger;
         }
 
-        public IEnumerable<MeteoStation> GetAllMeteoStations(bool trackChanges)
+        public IEnumerable<MeteoStationDto> GetAllMeteoStations(bool trackChanges)
         {
             try
             {
                 var meteoStations = repository.MeteoStation.GetAllMeteoStations(trackChanges);
+
+                var meteoStationsDto = meteoStations.Select(x =>
+                    new MeteoStationDto(x.MeteoStationId, x.Name,
+                        x.Latitude.HasValue ? x.Latitude.Value : 0,
+                        x.Longitude.HasValue ? x.Longitude.Value : 0));
                 
-                return meteoStations;
+                return meteoStationsDto;
             }
             catch (Exception ex)
             {
