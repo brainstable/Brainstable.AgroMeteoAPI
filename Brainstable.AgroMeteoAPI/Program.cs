@@ -1,4 +1,4 @@
-using Brainstable.AgroMeteoAPI.Contracts;
+using Brainstable.AgroMeteoAPI;
 using Brainstable.AgroMeteoAPI.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 
@@ -15,14 +15,17 @@ builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(Brainstable.AgroMeteoAPI.Presentation.AssemblyReference)
     .Assembly);
 
 var app = builder.Build();
-var logger = app.Services.GetRequiredService<ILoggerManager>();
-app.ConfigureExeptionHandler(logger);
+
+//var logger = app.Services.GetRequiredService<ILoggerManager>();
+//app.ConfigureExeptionHandler(logger);
+app.UseExceptionHandler(opt => { });
 
 if (app.Environment.IsProduction())
 {

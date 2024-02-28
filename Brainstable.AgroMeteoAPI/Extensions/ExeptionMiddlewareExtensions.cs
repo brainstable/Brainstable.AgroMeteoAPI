@@ -18,7 +18,7 @@ namespace Brainstable.AgroMeteoAPI.Extensions
                         var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                         if (contextFeature != null)
                         {
-                            logger.LogError($"Spmething went wrong: {contextFeature.Error}");
+                            logger.LogError($"Something went wrong: {contextFeature.Error}");
 
                             await context.Response.WriteAsync(new ErrorDetails
                             {
