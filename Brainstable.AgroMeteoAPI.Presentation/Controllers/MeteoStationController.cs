@@ -15,16 +15,11 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         [HttpGet]
         public IActionResult GetMeteoStations()
         {
-            try
-            {
-                var meteoStations = service.MeteoStationService.GetAllMeteoStations(trackChanges: false);
-                
-                return Ok(meteoStations);
-            }
-            catch
-            {
-                return StatusCode(500, "Internal server error");
-            }
+            throw new Exception("Exeption");
+            
+            var meteoStations = service.MeteoStationService.GetAllMeteoStations(trackChanges: false);
+
+            return Ok(meteoStations);
         }
     }
 }

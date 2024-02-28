@@ -1,3 +1,4 @@
+using Brainstable.AgroMeteoAPI.Contracts;
 using Brainstable.AgroMeteoAPI.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 
@@ -20,12 +21,10 @@ builder.Services.AddControllers()
     .Assembly);
 
 var app = builder.Build();
+var logger = app.Services.GetRequiredService<ILoggerManager>();
+app.ConfigureExeptionHandler(logger);
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
-else
+if (app.Environment.IsProduction())
 {
     app.UseHsts();
 }
