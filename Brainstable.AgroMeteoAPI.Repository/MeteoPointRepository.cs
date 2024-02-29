@@ -9,5 +9,29 @@ namespace Brainstable.AgroMeteoAPI.Repository
             : base(repositoryContext)
         {
         }
+
+        public IEnumerable<MeteoPoint> GetAllDaysMeteoPoints(string meteoStationId, bool trackChanges)
+        {
+            return FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges);
+        }
+
+        public Dictionary<DateOnly, double?> GetAllDaysTemperature(string meteoStationId, bool trackChanges)
+        {
+            var meteoPoints = FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
+                .Select(x => new
+                {
+                    Date = x.Date,
+                    Temperature = x.Temperature
+                })
+                .ToList();
+
+            Dictionary<DateOnly, double?> allDaysTemperature = new Dictionary<DateOnly, double?>();
+            foreach (var tempMeteoPoint in meteoPoints)
+            {
+                allDaysTemperature[tempMeteoPoint.Date] = tempMeteoPoint.Temperature;
+            }
+
+            return allDaysTemperature;
+        }
     }
 }
