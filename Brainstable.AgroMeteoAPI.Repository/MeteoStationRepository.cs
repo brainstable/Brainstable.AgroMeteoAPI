@@ -14,5 +14,9 @@ namespace Brainstable.AgroMeteoAPI.Repository
             FindAll(trackChanges)
                 .OrderBy(x => x.Name)
                 .ToList();
+
+        public MeteoStation GetMeteoStation(string meteoStationId, bool trackChanges) =>
+            FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
+                .SingleOrDefault();
     }
 }

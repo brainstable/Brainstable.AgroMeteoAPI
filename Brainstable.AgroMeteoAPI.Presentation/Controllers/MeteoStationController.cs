@@ -15,11 +15,17 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         [HttpGet]
         public IActionResult GetMeteoStations()
         {
-            throw new Exception("Exeption");
-            
             var meteoStations = service.MeteoStationService.GetAllMeteoStations(trackChanges: false);
 
             return Ok(meteoStations);
+        }
+
+        [HttpGet("{meteoStationId}")]
+        public IActionResult GetMeteoStation(string meteoStationId)
+        {
+            var meteoStation = service.MeteoStationService.GetMeteoStation(meteoStationId, false);
+
+            return Ok(meteoStation);
         }
     }
 }

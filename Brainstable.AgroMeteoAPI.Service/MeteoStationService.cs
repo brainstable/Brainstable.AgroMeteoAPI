@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 
 using Brainstable.AgroMeteoAPI.Contracts;
+using Brainstable.AgroMeteoAPI.Entities.Exceptions;
 using Brainstable.AgroMeteoAPI.Service.Contracts;
 using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 
@@ -26,6 +27,16 @@ namespace Brainstable.AgroMeteoAPI.Service
             var meteoStationsDto = mapper.Map<IEnumerable<MeteoStationDto>>(meteoStations);
 
             return meteoStationsDto;
+        }
+
+        public MeteoStationDto GetMeteoStation(string meteoStationId, bool trackChanges)
+        {
+            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
+            if (meteoStation is null)
+                throw new MeteoStationNotFoundException(meteoStationId);
+
+            var meteoStationDto = mapper.Map<MeteoStationDto>(meteoStation);
+            return meteoStationDto;
         }
     }
 }
