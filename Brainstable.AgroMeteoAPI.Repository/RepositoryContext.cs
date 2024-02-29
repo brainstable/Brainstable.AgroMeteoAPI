@@ -24,6 +24,7 @@ namespace Brainstable.AgroMeteoAPI.Repository
             });
 
             modelBuilder.ApplyConfiguration(new MeteoStationConfiguration());
+            modelBuilder.ApplyConfiguration(new MeteoPointConfiguration());
         }
     }
 }
