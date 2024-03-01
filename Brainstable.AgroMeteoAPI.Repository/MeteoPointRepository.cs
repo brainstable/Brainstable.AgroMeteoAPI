@@ -33,5 +33,10 @@ namespace Brainstable.AgroMeteoAPI.Repository
 
             return allDaysTemperature;
         }
+
+        public MeteoPoint GetMeteoPoint(string meteoStationId, DateOnly date, bool trackChanges)
+        {
+            return FindByCondition(x => x.MeteoStationId.Equals(meteoStationId) && x.Date == date, trackChanges).SingleOrDefault();
+        }
     }
 }

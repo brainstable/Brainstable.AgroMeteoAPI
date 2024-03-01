@@ -6,5 +6,6 @@ namespace Brainstable.AgroMeteoAPI.Service.Contracts
     {
         IEnumerable<MeteoPointDto> GetAllDaysMeteoPoints(string meteoStationId, bool trackChanges);
         Dictionary<DateOnly, double?> GetAllDaysTemperature(string meteoStationId, bool trackChanges);
+        MeteoPointDto GetMeteoPoint(string meteoStationId, DateOnly date, bool trackChanges);
     }
 }

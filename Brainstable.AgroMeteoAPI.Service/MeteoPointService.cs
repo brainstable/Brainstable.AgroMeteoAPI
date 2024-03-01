@@ -33,5 +33,15 @@ namespace Brainstable.AgroMeteoAPI.Service
         {
             return repository.MeteoPoint.GetAllDaysTemperature(meteoStationId, trackChanges);
         }
+
+        public MeteoPointDto GetMeteoPoint(string meteoStationId, DateOnly date, bool trackChanges)
+        {
+            var meteoPoint = repository.MeteoPoint.GetMeteoPoint(meteoStationId, date, trackChanges);
+            // exception
+
+            var meteoPointDto = mapper.Map<MeteoPointDto>(meteoPoint);
+
+            return meteoPointDto;
+        }
     }
 }

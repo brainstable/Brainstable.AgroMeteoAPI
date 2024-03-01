@@ -17,15 +17,17 @@ builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
-builder.Services.AddControllers()
+builder.Services.AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
     .AddApplicationPart(typeof(Brainstable.AgroMeteoAPI.Presentation.AssemblyReference)
-    .Assembly);
+    .Assembly)
+    .AddJsonOptions(options => options.UseDateOnlyTimeOnlyStringConverters()); ;
+
 
 var app = builder.Build();
 
 //var logger = app.Services.GetRequiredService<ILoggerManager>();
 //app.ConfigureExeptionHandler(logger);
-app.UseExceptionHandler(opt => { });
+app.UseExceptionHandler(options => { });
 
 if (app.Environment.IsProduction())
 {

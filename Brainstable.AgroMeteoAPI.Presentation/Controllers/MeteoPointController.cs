@@ -25,6 +25,15 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         }
 
         [HttpGet]
+        [Route("day/{date:DateTime}")]
+        public IActionResult GetMeteoPoint(string meteoStationId, DateOnly date)
+        {
+            var meteoPoint = service.MeteoPointService.GetMeteoPoint(meteoStationId, date, false);
+
+            return Ok(meteoPoint);
+        }
+
+        [HttpGet]
         [Route("talldays")]
         public IActionResult GetAllDaysTemperature(string meteoStationId)
         {
