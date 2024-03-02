@@ -1,6 +1,8 @@
 ﻿using Brainstable.AgroMeteoAPI.Contracts;
 using Brainstable.AgroMeteoAPI.Entities.Models;
 
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 namespace Brainstable.AgroMeteoAPI.Repository
 {
     public class MeteoPointRepository : RepositoryBase<MeteoPoint>, IMeteoPointRepository
@@ -37,6 +39,12 @@ namespace Brainstable.AgroMeteoAPI.Repository
         public MeteoPoint GetMeteoPoint(string meteoStationId, DateOnly date, bool trackChanges)
         {
             return FindByCondition(x => x.MeteoStationId.Equals(meteoStationId) && x.Date == date, trackChanges).SingleOrDefault();
+        }
+
+        public IEnumerable<MeteoPoint> GetDaysMeteoPoints(string meteoStationId, DateOnly startDate, DateOnly endDate, bool trackChanges)
+        {
+            return FindByCondition(
+                x => x.MeteoStationId.Equals(meteoStationId) && x.Date >= startDate && x.Date <= endDate, trackChanges);
         }
     }
 }

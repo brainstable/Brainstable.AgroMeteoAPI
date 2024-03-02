@@ -43,5 +43,15 @@ namespace Brainstable.AgroMeteoAPI.Service
 
             return meteoPointDto;
         }
+
+        public IEnumerable<MeteoPointDto> GetDaysMeteoPoints(string meteoStationId, DateOnly startDate, DateOnly endDate, bool trackChanges)
+        {
+            var meteoPoints = repository.MeteoPoint.GetDaysMeteoPoints(meteoStationId, startDate, endDate, trackChanges);
+            // exception
+
+            var meteoPointsDto = mapper.Map<IEnumerable<MeteoPointDto>>(meteoPoints);
+
+            return meteoPointsDto;
+        }
     }
 }

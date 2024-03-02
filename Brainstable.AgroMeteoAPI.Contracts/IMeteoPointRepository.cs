@@ -7,5 +7,6 @@ namespace Brainstable.AgroMeteoAPI.Contracts
         IEnumerable<MeteoPoint> GetAllDaysMeteoPoints(string meteoStationId, bool trackChanges);
         Dictionary<DateOnly, double?> GetAllDaysTemperature(string meteoStationId, bool trackChanges);
         MeteoPoint GetMeteoPoint(string meteoStationId, DateOnly date, bool trackChanges);
+        IEnumerable<MeteoPoint> GetDaysMeteoPoints(string meteoStationId, DateOnly startDate, DateOnly endDate, bool trackChanges);
     }
 }

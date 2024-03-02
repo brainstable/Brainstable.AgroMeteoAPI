@@ -25,10 +25,14 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         }
 
         [HttpGet]
-        [Route("day/{date:DateTime}")]
-        public IActionResult GetMeteoPoint(string meteoStationId, DateOnly date)
+        [Route("day")]
+        public IActionResult GetMeteoPoint(
+            [FromRoute(Name = "meteoStationId")]string meteoStationId, 
+            [FromQuery(Name = "date")]string date)
         {
-            var meteoPoint = service.MeteoPointService.GetMeteoPoint(meteoStationId, date, false);
+            DateOnly dateOnly = DateOnly.Parse(date);
+            
+            var meteoPoint = service.MeteoPointService.GetMeteoPoint(meteoStationId, dateOnly, false);
 
             return Ok(meteoPoint);
         }
@@ -40,6 +44,21 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
             var allDays = service.MeteoPointService.GetAllDaysTemperature(meteoStationId, false);
 
             return Ok(allDays);
+        }
+
+        [HttpGet]
+        [Route("days")]
+        public IActionResult GetMeteoPoint(
+            [FromRoute(Name = "meteoStationId")] string meteoStationId,
+            [FromQuery(Name = "start")] string startDate,
+            [FromQuery(Name = "end")] string endDate)
+        {
+            DateOnly start = DateOnly.Parse(startDate);
+            DateOnly end = DateOnly.Parse(endDate);
+
+            var meteoPoint = service.MeteoPointService.GetDaysMeteoPoints(meteoStationId, start, end, false);
+
+            return Ok(meteoPoint);
         }
     }
 }
