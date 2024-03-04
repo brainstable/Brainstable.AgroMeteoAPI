@@ -1,4 +1,3 @@
-using System.Security.Cryptography.Xml;
 using Brainstable.AgroMeteoAPI;
 using Brainstable.AgroMeteoAPI.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -24,20 +23,20 @@ builder.Services.AddSwaggerGen(x =>
     {
         Title = "AgroMeteoAPI",
         Version = "v1",
+        Description = "An ASP.NET Core Web API for out meteo date"
     });
 });
 
-builder.Services.AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
-    .AddApplicationPart(typeof(Brainstable.AgroMeteoAPI.Presentation.AssemblyReference)
-    .Assembly)
-    .AddJsonOptions(options => options.UseDateOnlyTimeOnlyStringConverters()); ;
-
+builder.Services.AddControllers(config =>
+        {
+            config.RespectBrowserAcceptHeader = true;
+            config.ReturnHttpNotAcceptable = true;
+        }).AddApplicationPart(typeof(Brainstable.AgroMeteoAPI.Presentation.AssemblyReference)
+            .Assembly);
 
 var app = builder.Build();
 
-//var logger = app.Services.GetRequiredService<ILoggerManager>();
-//app.ConfigureExeptionHandler(logger);
-app.UseExceptionHandler(options => { });
+app.UseExceptionHandler();
 
 if (app.Environment.IsProduction())
 {
@@ -46,15 +45,18 @@ if (app.Environment.IsProduction())
 else
 {
     app.UseSwagger();
-    app.UseSwaggerUI(x => x.SwaggerEndpoint("/swagger/v1/swagger.json", "AgroMeteoAPI v1"));
+    app.UseSwaggerUI(options =>
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "AgroMeteoAPI v1"));
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.All
 });
+
 app.UseCors("CorsPolicy");
 
 app.UseAuthorization();

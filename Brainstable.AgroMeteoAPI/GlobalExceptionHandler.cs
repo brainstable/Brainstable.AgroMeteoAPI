@@ -35,8 +35,8 @@ namespace Brainstable.AgroMeteoAPI
                 await httpContext.Response.WriteAsync(new ErrorDetails
                 {
                     StatusCode = httpContext.Response.StatusCode,
-                    Message = contextFeature.Error.Message
-                }.ToString(), cancellationToken: cancellationToken);
+                    Message = contextFeature.Error.Message,
+                }.ToString(), cancellationToken);
             }
 
             return true;

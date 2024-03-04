@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 
 using Brainstable.AgroMeteoAPI.Contracts;
+using Brainstable.AgroMeteoAPI.Entities.Exceptions;
 using Brainstable.AgroMeteoAPI.Service.Contracts;
 using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 
@@ -21,8 +22,11 @@ namespace Brainstable.AgroMeteoAPI.Service
 
         public IEnumerable<MeteoPointDto> GetAllDaysMeteoPoints(string meteoStationId, bool trackChanges)
         {
+            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
+            if (meteoStation is null)
+                throw new MeteoStationNotFoundException(meteoStationId);
+
             var meteoPoints = repository.MeteoPoint.GetAllDaysMeteoPoints(meteoStationId, trackChanges);
-            // exception
 
             var meteoPointsDto = mapper.Map<IEnumerable<MeteoPointDto>>(meteoPoints);
 
@@ -31,13 +35,20 @@ namespace Brainstable.AgroMeteoAPI.Service
 
         public Dictionary<DateOnly, double?> GetAllDaysTemperature(string meteoStationId, bool trackChanges)
         {
+            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
+            if (meteoStation is null)
+                throw new MeteoStationNotFoundException(meteoStationId);
+
             return repository.MeteoPoint.GetAllDaysTemperature(meteoStationId, trackChanges);
         }
 
         public MeteoPointDto GetMeteoPoint(string meteoStationId, DateOnly date, bool trackChanges)
         {
+            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
+            if (meteoStation is null)
+                throw new MeteoStationNotFoundException(meteoStationId);
+
             var meteoPoint = repository.MeteoPoint.GetMeteoPoint(meteoStationId, date, trackChanges);
-            // exception
 
             var meteoPointDto = mapper.Map<MeteoPointDto>(meteoPoint);
 
@@ -46,8 +57,11 @@ namespace Brainstable.AgroMeteoAPI.Service
 
         public IEnumerable<MeteoPointDto> GetDaysMeteoPoints(string meteoStationId, DateOnly startDate, DateOnly endDate, bool trackChanges)
         {
+            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
+            if (meteoStation is null)
+                throw new MeteoStationNotFoundException(meteoStationId);
+
             var meteoPoints = repository.MeteoPoint.GetDaysMeteoPoints(meteoStationId, startDate, endDate, trackChanges);
-            // exception
 
             var meteoPointsDto = mapper.Map<IEnumerable<MeteoPointDto>>(meteoPoints);
 

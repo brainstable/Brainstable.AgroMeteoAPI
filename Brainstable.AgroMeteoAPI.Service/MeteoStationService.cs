@@ -32,7 +32,7 @@ namespace Brainstable.AgroMeteoAPI.Service
         public MeteoStationDto GetMeteoStation(string meteoStationId, bool trackChanges)
         {
             var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
-            if (meteoStation is null)
+            if (meteoStation == null)
                 throw new MeteoStationNotFoundException(meteoStationId);
 
             var meteoStationDto = mapper.Map<MeteoStationDto>(meteoStation);
