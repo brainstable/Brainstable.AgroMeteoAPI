@@ -46,5 +46,11 @@ namespace Brainstable.AgroMeteoAPI.Repository
             return FindByCondition(
                 x => x.MeteoStationId.Equals(meteoStationId) && x.Date >= startDate && x.Date <= endDate, trackChanges);
         }
+
+        public void CreateMeteoPointForMeteoStation(string meteoStation, MeteoPoint meteoPoint)
+        {
+            meteoPoint.MeteoStationId = meteoStation;
+            Create(meteoPoint);
+        }
     }
 }

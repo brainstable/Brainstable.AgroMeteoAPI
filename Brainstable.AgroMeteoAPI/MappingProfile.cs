@@ -10,8 +10,9 @@ namespace Brainstable.AgroMeteoAPI
         public MappingProfile() 
         {
             CreateMap<MeteoStation, MeteoStationDto>();
-
             CreateMap<MeteoPoint, MeteoPointDto>();
+            CreateMap<MeteoStationForCreationDto, MeteoStation>();
+            CreateMap<MeteoPointForCreationDto, MeteoPoint>();
         }
     }
 }

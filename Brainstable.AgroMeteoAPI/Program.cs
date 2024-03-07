@@ -1,6 +1,7 @@
 using Brainstable.AgroMeteoAPI;
 using Brainstable.AgroMeteoAPI.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using NLog;
 
@@ -27,6 +28,11 @@ builder.Services.AddSwaggerGen(x =>
     });
 });
 
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
+
 builder.Services.AddControllers(config =>
         {
             config.RespectBrowserAcceptHeader = true;
@@ -36,7 +42,7 @@ builder.Services.AddControllers(config =>
 
 var app = builder.Build();
 
-app.UseExceptionHandler();
+app.UseExceptionHandler(opt => {});
 
 if (app.Environment.IsProduction())
 {

@@ -1,5 +1,5 @@
 ﻿using Brainstable.AgroMeteoAPI.Service.Contracts;
-
+using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
@@ -20,12 +20,24 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
             return Ok(meteoStations);
         }
 
-        [HttpGet("{meteoStationId}")]
+        [HttpGet("{meteoStationId}", Name = "MeteoStationById")]
         public IActionResult GetMeteoStation(string meteoStationId)
         {
             var meteoStation = service.MeteoStationService.GetMeteoStation(meteoStationId, false);
-
+            
             return Ok(meteoStation);
+        }
+
+        [HttpPost]
+        public IActionResult CreateMeteoStation([FromBody] MeteoStationForCreationDto meteoStation)
+        {
+            if (meteoStation is null)
+                return BadRequest("MeteoStationForCreationDto object is null");
+
+            var createdMeteoStation = service.MeteoStationService.CreateMeteoStation(meteoStation);
+
+            return CreatedAtRoute("MeteoStationById", new { meteoStationId = createdMeteoStation.MeteoStationId },
+                createdMeteoStation);
         }
     }
 }

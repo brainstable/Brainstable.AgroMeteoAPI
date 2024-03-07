@@ -18,5 +18,7 @@ namespace Brainstable.AgroMeteoAPI.Repository
         public MeteoStation GetMeteoStation(string meteoStationId, bool trackChanges) =>
             FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
                 .SingleOrDefault();
+
+        public void CreateMeteoStation(MeteoStation meteoStation) => Create(meteoStation);
     }
 }

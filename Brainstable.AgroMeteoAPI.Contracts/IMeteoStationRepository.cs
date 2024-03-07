@@ -6,5 +6,6 @@ namespace Brainstable.AgroMeteoAPI.Contracts
     {
         IEnumerable<MeteoStation> GetAllMeteoStations(bool trackChanges);
         MeteoStation GetMeteoStation(string meteoStationId, bool trackChanges);
+        void CreateMeteoStation(MeteoStation meteoStation);
     }
 }

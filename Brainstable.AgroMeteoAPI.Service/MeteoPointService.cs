@@ -2,6 +2,7 @@
 
 using Brainstable.AgroMeteoAPI.Contracts;
 using Brainstable.AgroMeteoAPI.Entities.Exceptions;
+using Brainstable.AgroMeteoAPI.Entities.Models;
 using Brainstable.AgroMeteoAPI.Service.Contracts;
 using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 
@@ -66,6 +67,23 @@ namespace Brainstable.AgroMeteoAPI.Service
             var meteoPointsDto = mapper.Map<IEnumerable<MeteoPointDto>>(meteoPoints);
 
             return meteoPointsDto;
+        }
+
+        public MeteoPointDto CreateMeteoPointForMeteoStation(string meteoStationId, MeteoPointForCreationDto meteoPointForCreation,
+            bool trackChanges)
+        {
+            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
+            if (meteoStation is null)
+                throw new MeteoStationNotFoundException(meteoStationId);
+
+            var meteoPoint = mapper.Map<MeteoPoint>(meteoPointForCreation);
+
+            repository.MeteoPoint.CreateMeteoPointForMeteoStation(meteoStationId, meteoPoint);
+            repository.Save();
+
+            var meteoPointToReturn = mapper.Map<MeteoPointDto>(meteoPoint);
+
+            return meteoPointToReturn;
         }
     }
 }

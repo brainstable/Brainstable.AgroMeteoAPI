@@ -1,5 +1,5 @@
 ﻿using Brainstable.AgroMeteoAPI.Service.Contracts;
-
+using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
@@ -25,7 +25,7 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         }
 
         [HttpGet]
-        [Route("day")]
+        [Route("day", Name = "GetMeteoPointForMeteoStation")]
         public IActionResult GetMeteoPoint(
             [FromRoute(Name = "meteoStationId")]string meteoStationId, 
             [FromQuery(Name = "date")]string date)
@@ -59,6 +59,20 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
             var meteoPoint = service.MeteoPointService.GetDaysMeteoPoints(meteoStationId, start, end, false);
 
             return Ok(meteoPoint);
+        }
+
+        [HttpPost]
+        public IActionResult CreateMeteoPointForMeteoStation(string meteoStationId,
+            [FromBody] MeteoPointForCreationDto meteoPoint)
+        {
+            if (meteoPoint is null)
+                return BadRequest("MeteoPointForMeteoStation object is null");
+
+            var meteoPointToReturn =
+                service.MeteoPointService.CreateMeteoPointForMeteoStation(meteoStationId, meteoPoint, false);
+
+            return CreatedAtRoute("GetMeteoPointForMeteoStation", new { meteoStationId },
+                meteoPointToReturn);
         }
     }
 }
