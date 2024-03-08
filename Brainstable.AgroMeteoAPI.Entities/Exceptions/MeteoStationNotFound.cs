@@ -1,8 +1,8 @@
 ﻿namespace Brainstable.AgroMeteoAPI.Entities.Exceptions;
 
-public sealed class MeteoStationNotFoundException : NotFoundException
+public sealed class MeteoStationNotFound : NotFoundException
 {
-    public MeteoStationNotFoundException(string meteoStationId) 
+    public MeteoStationNotFound(string meteoStationId) 
         : base($"The meteostation with id: {meteoStationId} doesn't exist in the database")
     {
     }

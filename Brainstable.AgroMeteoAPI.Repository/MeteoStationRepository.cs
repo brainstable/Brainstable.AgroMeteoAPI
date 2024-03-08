@@ -20,5 +20,9 @@ namespace Brainstable.AgroMeteoAPI.Repository
                 .SingleOrDefault();
 
         public void CreateMeteoStation(MeteoStation meteoStation) => Create(meteoStation);
+        public IEnumerable<MeteoStation> GetByIds(IEnumerable<string> meteoStationIds, bool trackChanges)
+        {
+            return FindByCondition(x => meteoStationIds.Contains(x.MeteoStationId), trackChanges);
+        }
     }
 }

@@ -7,5 +7,8 @@ namespace Brainstable.AgroMeteoAPI.Service.Contracts
         IEnumerable<MeteoStationDto> GetAllMeteoStations(bool trackChanges);
         MeteoStationDto GetMeteoStation(string meteoStationId, bool trackChanges);
         MeteoStationDto CreateMeteoStation(MeteoStationForCreationDto meteoStation);
+        IEnumerable<MeteoStationDto> GetByIds(IEnumerable<string> ids, bool trackChanges);
+        (IEnumerable<MeteoStationDto> meteoStations, string ids) CreateMeteoStationCollection(
+            IEnumerable<MeteoStationForCreationDto> meteoStationCollection);
     }
 }

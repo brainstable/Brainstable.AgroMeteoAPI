@@ -34,7 +34,7 @@ namespace Brainstable.AgroMeteoAPI.Service
         {
             var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
             if (meteoStation == null)
-                throw new MeteoStationNotFoundException(meteoStationId);
+                throw new MeteoStationNotFound(meteoStationId);
 
             var meteoStationDto = mapper.Map<MeteoStationDto>(meteoStation);
             return meteoStationDto;
@@ -50,6 +50,40 @@ namespace Brainstable.AgroMeteoAPI.Service
             var meteoStationToReturn = mapper.Map<MeteoStationDto>(meteoStationEntity);
 
             return meteoStationToReturn;
+        }
+
+        public IEnumerable<MeteoStationDto> GetByIds(IEnumerable<string> ids, bool trackChanges)
+        {
+            if (ids is null)
+                throw new IdParametersBadRequest();
+
+            var meteoStations = repository.MeteoStation.GetByIds(ids, trackChanges);
+
+            if (ids.Count() != meteoStations.Count())
+                throw new CollectionByIdsBadRequest();
+
+            var meteoStationsToReturn = mapper.Map<IEnumerable<MeteoStationDto>>(meteoStations);
+
+            return meteoStationsToReturn;
+        }
+
+        public (IEnumerable<MeteoStationDto> meteoStations, string ids) CreateMeteoStationCollection(IEnumerable<MeteoStationForCreationDto> meteoStationCollection)
+        {
+            if (meteoStationCollection is null)
+                throw new MeteoStationCollectionBadRequest();
+
+            var meteoStations = mapper.Map<IEnumerable<MeteoStation>>(meteoStationCollection);
+            foreach (var meteoStation in meteoStations)
+            {
+                repository.MeteoStation.CreateMeteoStation(meteoStation);
+            }
+
+            repository.Save();
+
+            var meteoStationCollectionToReturn = mapper.Map<IEnumerable<MeteoStationDto>>(meteoStations);
+            var ids = string.Join(",", meteoStationCollectionToReturn.Select(x => x.MeteoStationId));
+            
+            return (meteoStations: meteoStationCollectionToReturn, ids: ids);
         }
     }
 }

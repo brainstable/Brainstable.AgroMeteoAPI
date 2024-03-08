@@ -12,4 +12,5 @@ public class MeteoStationForCreationDto
     public string? NameRus { get; set; }
     public string? NameEng { get; set; }
     public string? Country { get; set; }
+    public IEnumerable<MeteoPointForCreationDto> MeteoPoints { get; set; }
 }

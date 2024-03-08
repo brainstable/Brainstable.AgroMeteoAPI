@@ -25,7 +25,7 @@ namespace Brainstable.AgroMeteoAPI.Service
         {
             var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
             if (meteoStation is null)
-                throw new MeteoStationNotFoundException(meteoStationId);
+                throw new MeteoStationNotFound(meteoStationId);
 
             var meteoPoints = repository.MeteoPoint.GetAllDaysMeteoPoints(meteoStationId, trackChanges);
 
@@ -38,7 +38,7 @@ namespace Brainstable.AgroMeteoAPI.Service
         {
             var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
             if (meteoStation is null)
-                throw new MeteoStationNotFoundException(meteoStationId);
+                throw new MeteoStationNotFound(meteoStationId);
 
             return repository.MeteoPoint.GetAllDaysTemperature(meteoStationId, trackChanges);
         }
@@ -47,7 +47,7 @@ namespace Brainstable.AgroMeteoAPI.Service
         {
             var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
             if (meteoStation is null)
-                throw new MeteoStationNotFoundException(meteoStationId);
+                throw new MeteoStationNotFound(meteoStationId);
 
             var meteoPoint = repository.MeteoPoint.GetMeteoPoint(meteoStationId, date, trackChanges);
 
@@ -60,7 +60,7 @@ namespace Brainstable.AgroMeteoAPI.Service
         {
             var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
             if (meteoStation is null)
-                throw new MeteoStationNotFoundException(meteoStationId);
+                throw new MeteoStationNotFound(meteoStationId);
 
             var meteoPoints = repository.MeteoPoint.GetDaysMeteoPoints(meteoStationId, startDate, endDate, trackChanges);
 
@@ -74,7 +74,7 @@ namespace Brainstable.AgroMeteoAPI.Service
         {
             var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
             if (meteoStation is null)
-                throw new MeteoStationNotFoundException(meteoStationId);
+                throw new MeteoStationNotFound(meteoStationId);
 
             var meteoPoint = mapper.Map<MeteoPoint>(meteoPointForCreation);
 

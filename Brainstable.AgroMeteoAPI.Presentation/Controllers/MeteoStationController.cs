@@ -39,5 +39,22 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
             return CreatedAtRoute("MeteoStationById", new { meteoStationId = createdMeteoStation.MeteoStationId },
                 createdMeteoStation);
         }
+
+        [HttpGet("collection/({ids})", Name = "MeteoStationCollection")]
+        public IActionResult GetMeteoStationCollection(IEnumerable<string> ids)
+        {
+            var meteoStations = service.MeteoStationService.GetByIds(ids, false);
+
+            return Ok(meteoStations);
+        }
+
+        [HttpPost("collection")]
+        public IActionResult CreateMeteoStationCollection(
+            [FromBody] IEnumerable<MeteoStationForCreationDto> meteStationCollection)
+        {
+            var result = service.MeteoStationService.CreateMeteoStationCollection(meteStationCollection);
+
+            return CreatedAtRoute("MeteoStationCollection", new { result.ids }, result.meteoStations);
+        }
     }
 }
