@@ -1,4 +1,5 @@
-﻿using Brainstable.AgroMeteoAPI.Service.Contracts;
+﻿using Brainstable.AgroMeteoAPI.Presentation.ModelBinders;
+using Brainstable.AgroMeteoAPI.Service.Contracts;
 using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,7 +42,7 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         }
 
         [HttpGet("collection/({ids})", Name = "MeteoStationCollection")]
-        public IActionResult GetMeteoStationCollection(IEnumerable<string> ids)
+        public IActionResult GetMeteoStationCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))][FromRoute(Name = "ids")]IEnumerable<string> ids)
         {
             var meteoStations = service.MeteoStationService.GetByIds(ids, false);
 
