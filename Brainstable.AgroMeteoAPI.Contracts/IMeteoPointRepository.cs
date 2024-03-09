@@ -9,5 +9,6 @@ namespace Brainstable.AgroMeteoAPI.Contracts
         MeteoPoint GetMeteoPoint(string meteoStationId, DateOnly date, bool trackChanges);
         IEnumerable<MeteoPoint> GetDaysMeteoPoints(string meteoStationId, DateOnly startDate, DateOnly endDate, bool trackChanges);
         void CreateMeteoPointForMeteoStation(string meteoStation, MeteoPoint meteoPoint);
+        void DeleteMeteoPoint(MeteoPoint meteoPoint);
     }
 }

@@ -52,5 +52,10 @@ namespace Brainstable.AgroMeteoAPI.Repository
             meteoPoint.MeteoStationId = meteoStation;
             Create(meteoPoint);
         }
+
+        public void DeleteMeteoPoint(MeteoPoint meteoPoint)
+        {
+            Delete(meteoPoint);
+        }
     }
 }

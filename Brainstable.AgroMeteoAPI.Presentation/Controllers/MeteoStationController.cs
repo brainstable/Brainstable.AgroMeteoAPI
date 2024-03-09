@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 {
-    [Route("api/meteostations")]
+    [Route("meteostations")]
     [ApiController]
     public class MeteoStationController : ControllerBase
     {
@@ -50,8 +50,7 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         }
 
         [HttpPost("collection")]
-        public IActionResult CreateMeteoStationCollection(
-            [FromBody] IEnumerable<MeteoStationForCreationDto> meteStationCollection)
+        public IActionResult CreateMeteoStationCollection([FromBody] IEnumerable<MeteoStationForCreationDto> meteStationCollection)
         {
             var result = service.MeteoStationService.CreateMeteoStationCollection(meteStationCollection);
 

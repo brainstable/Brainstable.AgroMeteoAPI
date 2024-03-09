@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 {
-    [Route("api/meteostations/{meteoStationId}/")]
+    [Route("meteostations/{meteoStationId}/")]
     [ApiController]
     public class MeteoPointController : ControllerBase
     {
@@ -25,10 +25,8 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         }
 
         [HttpGet]
-        [Route("day", Name = "GetMeteoPointForMeteoStation")]
-        public IActionResult GetMeteoPoint(
-            [FromRoute(Name = "meteoStationId")]string meteoStationId, 
-            [FromQuery(Name = "date")]string date)
+        [Route("{date}", Name = "GetMeteoPointForMeteoStation")]
+        public IActionResult GetMeteoPoint(string meteoStationId, string date)
         {
             DateOnly dateOnly = DateOnly.Parse(date);
             
@@ -73,6 +71,16 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 
             return CreatedAtRoute("GetMeteoPointForMeteoStation", new { meteoStationId },
                 meteoPointToReturn);
+        }
+
+        [HttpDelete("{date}")]
+        public IActionResult DeleteMeteoPointForMeteoSttaion(string meteoStationId, string date)
+        {
+            DateOnly dateOnly = DateOnly.Parse(date);
+
+            service.MeteoPointService.DeleteMeteoPointForMeteoStation(meteoStationId, dateOnly, false);
+
+            return NoContent();
         }
     }
 }

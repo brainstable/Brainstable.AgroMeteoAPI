@@ -85,5 +85,15 @@ namespace Brainstable.AgroMeteoAPI.Service
 
             return meteoPointToReturn;
         }
+
+        public void DeleteMeteoPointForMeteoStation(string meteoStation, DateOnly date, bool trackChanges)
+        {
+            var meteoPoint = repository.MeteoPoint.GetMeteoPoint(meteoStation, date, trackChanges);
+            if (meteoPoint is null)
+                throw new MeteoPointNotFound(meteoStation, date);
+
+            repository.MeteoPoint.DeleteMeteoPoint(meteoPoint);
+            repository.Save();
+        }
     }
 }

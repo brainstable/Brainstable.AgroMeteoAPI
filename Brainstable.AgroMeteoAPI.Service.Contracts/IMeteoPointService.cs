@@ -11,5 +11,7 @@ namespace Brainstable.AgroMeteoAPI.Service.Contracts
 
         MeteoPointDto CreateMeteoPointForMeteoStation(string meteoStationId,
             MeteoPointForCreationDto meteoPointForCreation, bool trackChanges);
+
+        void DeleteMeteoPointForMeteoStation(string meteoStation, DateOnly date, bool trackChanges);
     }
 }
