@@ -56,5 +56,13 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 
             return CreatedAtRoute("MeteoStationCollection", new { result.ids }, result.meteoStations);
         }
+
+        [HttpDelete("{meteoStationId}")]
+        public IActionResult DeleteMeteoStation(string meteoStationId)
+        {
+            service.MeteoStationService.DeleteMeteoStation(meteoStationId, false);
+
+            return NoContent();
+        }
     }
 }

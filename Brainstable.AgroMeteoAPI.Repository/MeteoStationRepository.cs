@@ -24,5 +24,10 @@ namespace Brainstable.AgroMeteoAPI.Repository
         {
             return FindByCondition(x => meteoStationIds.Contains(x.MeteoStationId), trackChanges);
         }
+
+        public void DeleteMeteoStation(MeteoStation meteoStation)
+        {
+            Delete(meteoStation);
+        }
     }
 }

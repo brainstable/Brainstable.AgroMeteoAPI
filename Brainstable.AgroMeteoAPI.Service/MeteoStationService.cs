@@ -85,5 +85,15 @@ namespace Brainstable.AgroMeteoAPI.Service
             
             return (meteoStations: meteoStationCollectionToReturn, ids: ids);
         }
+
+        public void DeleteMeteoStation(string meteoStationId, bool trackChanges)
+        {
+            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
+            if (meteoStation is null)
+                throw new MeteoStationNotFound(meteoStationId);
+
+            repository.MeteoStation.DeleteMeteoStation(meteoStation);
+            repository.Save();
+        }
     }
 }
