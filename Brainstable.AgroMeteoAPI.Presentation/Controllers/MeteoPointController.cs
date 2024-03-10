@@ -82,5 +82,19 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("{date}")]
+        public IActionResult UpdateMeteoPointForMeteoStation(string meteoStationId, string date,
+            [FromBody] MeteoPointForUpdateDto meteoPoint)
+        {
+            if (meteoPoint is null)
+                return BadRequest("MeteoPointForUpdateDto object is null");
+
+            DateOnly dateOnly = DateOnly.Parse(date);
+
+            service.MeteoPointService.UpdateMeteoPointForMeteoStation(meteoStationId, dateOnly, meteoPoint, false, true);
+
+            return NoContent();
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace Brainstable.AgroMeteoAPI
             CreateMap<MeteoPoint, MeteoPointDto>();
             CreateMap<MeteoStationForCreationDto, MeteoStation>();
             CreateMap<MeteoPointForCreationDto, MeteoPoint>();
+            CreateMap<MeteoPointForUpdateDto, MeteoPoint>();
         }
     }
 }

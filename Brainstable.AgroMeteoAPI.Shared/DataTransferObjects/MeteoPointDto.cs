@@ -1,6 +1,6 @@
 ﻿namespace Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 
-public record MeteoPointDto(DateOnly Date, 
+public record MeteoPointDto(
     double? Temperature, 
     double? MinTemperature, 
     double? MaxTemperature, 

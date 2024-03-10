@@ -86,13 +86,28 @@ namespace Brainstable.AgroMeteoAPI.Service
             return meteoPointToReturn;
         }
 
-        public void DeleteMeteoPointForMeteoStation(string meteoStation, DateOnly date, bool trackChanges)
+        public void DeleteMeteoPointForMeteoStation(string meteoStationId, DateOnly date, bool trackChanges)
         {
-            var meteoPoint = repository.MeteoPoint.GetMeteoPoint(meteoStation, date, trackChanges);
+            var meteoPoint = repository.MeteoPoint.GetMeteoPoint(meteoStationId, date, trackChanges);
             if (meteoPoint is null)
-                throw new MeteoPointNotFound(meteoStation, date);
+                throw new MeteoPointNotFound(meteoStationId, date);
 
             repository.MeteoPoint.DeleteMeteoPoint(meteoPoint);
+            repository.Save();
+        }
+
+        public void UpdateMeteoPointForMeteoStation(string meteoStationId, DateOnly date, MeteoPointForUpdateDto meteoPointForUpdate,
+            bool stationTrackChanges, bool pointTrackChanges)
+        {
+            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, stationTrackChanges);
+            if (meteoStation is null)
+                throw new MeteoStationNotFound(meteoStationId);
+
+            var meteoPoint = repository.MeteoPoint.GetMeteoPoint(meteoStationId, date, pointTrackChanges);
+            if (meteoPoint is null)
+                throw new MeteoPointNotFound(meteoStationId, date);
+
+            mapper.Map(meteoPointForUpdate, meteoPoint);
             repository.Save();
         }
     }
