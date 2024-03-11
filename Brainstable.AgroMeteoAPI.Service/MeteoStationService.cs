@@ -33,7 +33,7 @@ namespace Brainstable.AgroMeteoAPI.Service
         public MeteoStationDto GetMeteoStation(string meteoStationId, bool trackChanges)
         {
             var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
-            if (meteoStation == null)
+            if (meteoStation is null)
                 throw new MeteoStationNotFound(meteoStationId);
 
             var meteoStationDto = mapper.Map<MeteoStationDto>(meteoStation);
@@ -93,6 +93,16 @@ namespace Brainstable.AgroMeteoAPI.Service
                 throw new MeteoStationNotFound(meteoStationId);
 
             repository.MeteoStation.DeleteMeteoStation(meteoStation);
+            repository.Save();
+        }
+
+        public void UpdateMeteoStation(string meteoStationId, MeteoStationForUpdateDto meteoStationUpdate, bool trackChanges)
+        {
+            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
+            if (meteoStation is null)
+                throw new MeteoStationNotFound(meteoStationId);
+
+            mapper.Map(meteoStationUpdate, meteoStation);
             repository.Save();
         }
     }

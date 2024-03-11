@@ -64,5 +64,16 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("{meteoStationId}")]
+        public IActionResult UpdateMeteoStation(string meteoStationId, [FromBody] MeteoStationForUpdateDto meteoStation)
+        {
+            if (meteoStation is null)
+                return BadRequest("MeteoStationForUpdate object is null");
+
+            service.MeteoStationService.UpdateMeteoStation(meteoStationId, meteoStation, true);
+
+            return NoContent();
+        }
     }
 }
