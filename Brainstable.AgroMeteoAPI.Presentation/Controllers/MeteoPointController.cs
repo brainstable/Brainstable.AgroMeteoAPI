@@ -1,5 +1,6 @@
 ﻿using Brainstable.AgroMeteoAPI.Service.Contracts;
 using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
@@ -93,6 +94,24 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
             DateOnly dateOnly = DateOnly.Parse(date);
 
             service.MeteoPointService.UpdateMeteoPointForMeteoStation(meteoStationId, dateOnly, meteoPoint, false, true);
+
+            return NoContent();
+        }
+
+        [HttpPatch("{date}")]
+        public IActionResult PartiallyUpdateMeteoPointForMeteoStation(string meteoStationId, string date,
+            [FromBody] JsonPatchDocument<MeteoPointForUpdateDto> patchDoc)
+        {
+            if (patchDoc is null)
+                return BadRequest("patchDoc object sent from client is null");
+
+            DateOnly dateOnly = DateOnly.Parse(date);
+
+            var result = service.MeteoPointService.GetMeteoPointForPatch(meteoStationId, dateOnly, false, true);
+
+            patchDoc.ApplyTo(result.meteoPointToPatch);
+
+            service.MeteoPointService.SaveChangesForPatch(result.meteoPointToPatch, result.meteoPoint);
 
             return NoContent();
         }

@@ -1,4 +1,5 @@
-﻿using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
+﻿using Brainstable.AgroMeteoAPI.Entities.Models;
+using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 
 namespace Brainstable.AgroMeteoAPI.Service.Contracts
 {
@@ -14,5 +15,9 @@ namespace Brainstable.AgroMeteoAPI.Service.Contracts
 
         void DeleteMeteoPointForMeteoStation(string meteoStationId, DateOnly date, bool trackChanges);
         void UpdateMeteoPointForMeteoStation(string meteoStationId, DateOnly date, MeteoPointForUpdateDto meteoPointForUpdate, bool stationTrackChanges, bool pointTrackChanges); 
+
+        (MeteoPointForUpdateDto meteoPointToPatch, MeteoPoint meteoPoint) GetMeteoPointForPatch(string meteoStationId, DateOnly date, bool stationTrackChanges, bool pointTrackChanges);
+        void SaveChangesForPatch(MeteoPointForUpdateDto meteoPointToPatch, MeteoPoint meteoPoint);
+
     }
 }

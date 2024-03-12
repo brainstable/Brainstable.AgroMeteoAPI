@@ -110,5 +110,27 @@ namespace Brainstable.AgroMeteoAPI.Service
             mapper.Map(meteoPointForUpdate, meteoPoint);
             repository.Save();
         }
+
+        public (MeteoPointForUpdateDto meteoPointToPatch, MeteoPoint meteoPoint) GetMeteoPointForPatch(string meteoStationId,
+            DateOnly date, bool stationTrackChanges, bool pointTrackChanges)
+        {
+            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, stationTrackChanges);
+            if (meteoStation is null)
+                throw new MeteoStationNotFound(meteoStationId);
+
+            var meteoPointEntity = repository.MeteoPoint.GetMeteoPoint(meteoStationId, date, pointTrackChanges);
+            if (meteoPointEntity is null)
+                throw new MeteoPointNotFound(meteoStationId, date);
+
+            var meteoPointToPatch = mapper.Map<MeteoPointForUpdateDto>(meteoPointEntity);
+
+            return (meteoPointToPatch, meteoPointEntity);
+        }
+
+        public void SaveChangesForPatch(MeteoPointForUpdateDto meteoPointToPatch, MeteoPoint meteoPoint)
+        {
+            mapper.Map(meteoPointToPatch, meteoPoint);
+            repository.Save();
+        }
     }
 }

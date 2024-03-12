@@ -2,8 +2,12 @@ using Brainstable.AgroMeteoAPI;
 using Brainstable.AgroMeteoAPI.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using NLog;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,8 +41,8 @@ builder.Services.AddControllers(config =>
         {
             config.RespectBrowserAcceptHeader = true;
             config.ReturnHttpNotAcceptable = true;
-        }).AddApplicationPart(typeof(Brainstable.AgroMeteoAPI.Presentation.AssemblyReference)
-            .Assembly);
+            config.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
+        }).AddApplicationPart(typeof(Brainstable.AgroMeteoAPI.Presentation.AssemblyReference).Assembly);
 
 var app = builder.Build();
 
@@ -70,3 +74,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
+    new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
+        .Services.BuildServiceProvider()
+        .GetRequiredService<IOptions<MvcOptions>>().Value.InputFormatters
+        .OfType<NewtonsoftJsonPatchInputFormatter>().First();
