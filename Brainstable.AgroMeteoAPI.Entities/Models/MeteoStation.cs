@@ -7,12 +7,13 @@ namespace Brainstable.AgroMeteoAPI.Entities.Models
     public class MeteoStation
     {
         [Column("meteo_station_id")]
-        [MaxLength(6, ErrorMessage = "")]
+        [Required(ErrorMessage = "MeteoStationId is a required field")]
+        [MaxLength(6, ErrorMessage = "Maximum length for the MeteoStationId is 6 characters")]
         public string MeteoStationId { get; set; }
 
         [Column("name")]
-        [Required(ErrorMessage = "")]
-        [MaxLength(100, ErrorMessage = "")]
+        [Required(ErrorMessage = "Name is a required field")]
+        [MaxLength(100, ErrorMessage = "Maximum length for the Name is 100 characters")]
         public string Name { get; set; }
 
         [Column("lat")]
@@ -25,15 +26,15 @@ namespace Brainstable.AgroMeteoAPI.Entities.Models
         public double? Altitude { get; set; }
 
         [Column("name_rus")]
-        [MaxLength(100, ErrorMessage = "")]
+        [MaxLength(100, ErrorMessage = "Maximum length for the NameRus is 100 characters")]
         public string? NameRus { get; set; }
 
         [Column("name_eng")]
-        [MaxLength(100, ErrorMessage = "")]
+        [MaxLength(100, ErrorMessage = "Maximum length for the NameEng is 100 characters")]
         public string? NameEng { get; set; }
 
         [Column("country")]
-        [MaxLength(50, ErrorMessage = "")]
+        [MaxLength(50, ErrorMessage = "Maximum length for the Country is 50 characters")]
         public string? Country { get; set; }
 
         public ICollection<MeteoPoint> MeteoPoints { get; set; }

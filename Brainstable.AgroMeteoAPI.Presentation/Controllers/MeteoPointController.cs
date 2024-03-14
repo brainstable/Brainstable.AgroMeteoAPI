@@ -67,6 +67,9 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
             if (meteoPoint is null)
                 return BadRequest("MeteoPointForMeteoStation object is null");
 
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+
             var meteoPointToReturn =
                 service.MeteoPointService.CreateMeteoPointForMeteoStation(meteoStationId, meteoPoint, false);
 
@@ -109,7 +112,12 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 
             var result = service.MeteoPointService.GetMeteoPointForPatch(meteoStationId, dateOnly, false, true);
 
-            patchDoc.ApplyTo(result.meteoPointToPatch);
+            patchDoc.ApplyTo(result.meteoPointToPatch, ModelState);
+
+            TryValidateModel(result.meteoPointToPatch);
+
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
 
             service.MeteoPointService.SaveChangesForPatch(result.meteoPointToPatch, result.meteoPoint);
 

@@ -35,6 +35,9 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
             if (meteoStation is null)
                 return BadRequest("MeteoStationForCreationDto object is null");
 
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+
             var createdMeteoStation = service.MeteoStationService.CreateMeteoStation(meteoStation);
 
             return CreatedAtRoute("MeteoStationById", new { meteoStationId = createdMeteoStation.MeteoStationId },
