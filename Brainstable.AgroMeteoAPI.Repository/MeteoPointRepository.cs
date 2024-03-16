@@ -1,7 +1,6 @@
 ﻿using Brainstable.AgroMeteoAPI.Contracts;
 using Brainstable.AgroMeteoAPI.Entities.Models;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.EntityFrameworkCore;
 
 namespace Brainstable.AgroMeteoAPI.Repository
 {
@@ -12,20 +11,20 @@ namespace Brainstable.AgroMeteoAPI.Repository
         {
         }
 
-        public IEnumerable<MeteoPoint> GetAllDaysMeteoPoints(string meteoStationId, bool trackChanges)
+        public async Task<IEnumerable<MeteoPoint>> GetAllDaysMeteoPointsAsync(string meteoStationId, bool trackChanges)
         {
-            return FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges);
+            return await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges).ToListAsync();
         }
 
-        public Dictionary<DateOnly, double?> GetAllDaysTemperature(string meteoStationId, bool trackChanges)
+        public async Task<Dictionary<DateOnly, double?>> GetAllDaysTemperatureAsync(string meteoStationId, bool trackChanges)
         {
-            var meteoPoints = FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
+            var meteoPoints = await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
                 .Select(x => new
                 {
                     Date = x.Date,
                     Temperature = x.Temperature
                 })
-                .ToList();
+                .ToListAsync();
 
             Dictionary<DateOnly, double?> allDaysTemperature = new Dictionary<DateOnly, double?>();
             foreach (var tempMeteoPoint in meteoPoints)
@@ -36,15 +35,14 @@ namespace Brainstable.AgroMeteoAPI.Repository
             return allDaysTemperature;
         }
 
-        public MeteoPoint GetMeteoPoint(string meteoStationId, DateOnly date, bool trackChanges)
+        public async Task<MeteoPoint> GetMeteoPointAsync(string meteoStationId, DateOnly date, bool trackChanges)
         {
-            return FindByCondition(x => x.MeteoStationId.Equals(meteoStationId) && x.Date == date, trackChanges).SingleOrDefault();
+            return await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId) && x.Date == date, trackChanges).SingleOrDefaultAsync();
         }
 
-        public IEnumerable<MeteoPoint> GetDaysMeteoPoints(string meteoStationId, DateOnly startDate, DateOnly endDate, bool trackChanges)
+        public async Task<IEnumerable<MeteoPoint>> GetDaysMeteoPointsAsync(string meteoStationId, DateOnly startDate, DateOnly endDate, bool trackChanges)
         {
-            return FindByCondition(
-                x => x.MeteoStationId.Equals(meteoStationId) && x.Date >= startDate && x.Date <= endDate, trackChanges);
+            return await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId) && x.Date >= startDate && x.Date <= endDate, trackChanges).ToListAsync();
         }
 
         public void CreateMeteoPointForMeteoStation(string meteoStation, MeteoPoint meteoPoint)

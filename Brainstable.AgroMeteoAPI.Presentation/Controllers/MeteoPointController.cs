@@ -18,36 +18,36 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 
         [HttpGet]
         [Route("alldays")]
-        public IActionResult GetAllDaysMeteoPoints(string meteoStationId)
+        public async Task<IActionResult> GetAllDaysMeteoPoints(string meteoStationId)
         {
-            var allDaysMeteoPoints = service.MeteoPointService.GetAllDaysMeteoPoints(meteoStationId, false);
+            var allDaysMeteoPoints = await service.MeteoPointService.GetAllDaysMeteoPointsAsync(meteoStationId, false);
 
             return Ok(allDaysMeteoPoints);
         }
 
         [HttpGet]
         [Route("{date}", Name = "GetMeteoPointForMeteoStation")]
-        public IActionResult GetMeteoPoint(string meteoStationId, string date)
+        public async Task<IActionResult> GetMeteoPoint(string meteoStationId, string date)
         {
             DateOnly dateOnly = DateOnly.Parse(date);
             
-            var meteoPoint = service.MeteoPointService.GetMeteoPoint(meteoStationId, dateOnly, false);
+            var meteoPoint = await service.MeteoPointService.GetMeteoPointAsync(meteoStationId, dateOnly, false);
 
             return Ok(meteoPoint);
         }
 
         [HttpGet]
         [Route("talldays")]
-        public IActionResult GetAllDaysTemperature(string meteoStationId)
+        public async Task<IActionResult> GetAllDaysTemperature(string meteoStationId)
         {
-            var allDays = service.MeteoPointService.GetAllDaysTemperature(meteoStationId, false);
+            var allDays = await service.MeteoPointService.GetAllDaysTemperatureAsync(meteoStationId, false);
 
             return Ok(allDays);
         }
 
         [HttpGet]
         [Route("days")]
-        public IActionResult GetMeteoPoint(
+        public async Task<IActionResult> GetMeteoPoint(
             [FromRoute(Name = "meteoStationId")] string meteoStationId,
             [FromQuery(Name = "start")] string startDate,
             [FromQuery(Name = "end")] string endDate)
@@ -55,13 +55,13 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
             DateOnly start = DateOnly.Parse(startDate);
             DateOnly end = DateOnly.Parse(endDate);
 
-            var meteoPoint = service.MeteoPointService.GetDaysMeteoPoints(meteoStationId, start, end, false);
+            var meteoPoint = await service.MeteoPointService.GetDaysMeteoPointsAsync(meteoStationId, start, end, false);
 
             return Ok(meteoPoint);
         }
 
         [HttpPost]
-        public IActionResult CreateMeteoPointForMeteoStation(string meteoStationId,
+        public async Task<IActionResult> CreateMeteoPointForMeteoStation(string meteoStationId,
             [FromBody] MeteoPointForCreationDto meteoPoint)
         {
             if (meteoPoint is null)
@@ -70,25 +70,24 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
 
-            var meteoPointToReturn =
-                service.MeteoPointService.CreateMeteoPointForMeteoStation(meteoStationId, meteoPoint, false);
+            var meteoPointToReturn = await service.MeteoPointService.CreateMeteoPointForMeteoStationAsync(meteoStationId, meteoPoint, false);
 
             return CreatedAtRoute("GetMeteoPointForMeteoStation", new { meteoStationId },
                 meteoPointToReturn);
         }
 
         [HttpDelete("{date}")]
-        public IActionResult DeleteMeteoPointForMeteoSttaion(string meteoStationId, string date)
+        public async Task<IActionResult> DeleteMeteoPointForMeteoSttaion(string meteoStationId, string date)
         {
             DateOnly dateOnly = DateOnly.Parse(date);
 
-            service.MeteoPointService.DeleteMeteoPointForMeteoStation(meteoStationId, dateOnly, false);
+            await service.MeteoPointService.DeleteMeteoPointForMeteoStationAsync(meteoStationId, dateOnly, false);
 
             return NoContent();
         }
 
         [HttpPut("{date}")]
-        public IActionResult UpdateMeteoPointForMeteoStation(string meteoStationId, string date,
+        public async Task<IActionResult> UpdateMeteoPointForMeteoStation(string meteoStationId, string date,
             [FromBody] MeteoPointForUpdateDto meteoPoint)
         {
             if (meteoPoint is null)
@@ -96,21 +95,21 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 
             DateOnly dateOnly = DateOnly.Parse(date);
 
-            service.MeteoPointService.UpdateMeteoPointForMeteoStation(meteoStationId, dateOnly, meteoPoint, false, true);
+            await service.MeteoPointService.UpdateMeteoPointForMeteoStationAsync(meteoStationId, dateOnly, meteoPoint, false, true);
 
             return NoContent();
         }
 
         [HttpPatch("{date}")]
-        public IActionResult PartiallyUpdateMeteoPointForMeteoStation(string meteoStationId, string date,
+        public async Task<IActionResult> PartiallyUpdateMeteoPointForMeteoStation(string meteoStationId, string date,
             [FromBody] JsonPatchDocument<MeteoPointForUpdateDto> patchDoc)
         {
             if (patchDoc is null)
                 return BadRequest("patchDoc object sent from client is null");
 
             DateOnly dateOnly = DateOnly.Parse(date);
-
-            var result = service.MeteoPointService.GetMeteoPointForPatch(meteoStationId, dateOnly, false, true);
+             
+            var result = await service.MeteoPointService.GetMeteoPointForPatchAsync(meteoStationId, dateOnly, false, true);
 
             patchDoc.ApplyTo(result.meteoPointToPatch, ModelState);
 
@@ -119,7 +118,7 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
 
-            service.MeteoPointService.SaveChangesForPatch(result.meteoPointToPatch, result.meteoPoint);
+            await service.MeteoPointService.SaveChangesForPatchAsync(result.meteoPointToPatch, result.meteoPoint);
 
             return NoContent();
         }

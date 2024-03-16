@@ -1,5 +1,6 @@
 ﻿using Brainstable.AgroMeteoAPI.Contracts;
 using Brainstable.AgroMeteoAPI.Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Brainstable.AgroMeteoAPI.Repository
 {
@@ -10,19 +11,19 @@ namespace Brainstable.AgroMeteoAPI.Repository
         {
         }
 
-        public IEnumerable<MeteoStation> GetAllMeteoStations(bool trackChanges) =>
-            FindAll(trackChanges)
+        public async Task<IEnumerable<MeteoStation>> GetAllMeteoStationsAsync(bool trackChanges) =>
+            await FindAll(trackChanges)
                 .OrderBy(x => x.Name)
-                .ToList();
+                .ToListAsync();
 
-        public MeteoStation GetMeteoStation(string meteoStationId, bool trackChanges) =>
-            FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
-                .SingleOrDefault();
+        public async Task<MeteoStation> GetMeteoStationAsync(string meteoStationId, bool trackChanges) =>
+            await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
+                .SingleOrDefaultAsync();
 
         public void CreateMeteoStation(MeteoStation meteoStation) => Create(meteoStation);
-        public IEnumerable<MeteoStation> GetByIds(IEnumerable<string> meteoStationIds, bool trackChanges)
+        public async Task<IEnumerable<MeteoStation>> GetByIdsAsync(IEnumerable<string> meteoStationIds, bool trackChanges)
         {
-            return FindByCondition(x => meteoStationIds.Contains(x.MeteoStationId), trackChanges);
+            return await FindByCondition(x => meteoStationIds.Contains(x.MeteoStationId), trackChanges).ToListAsync();
         }
 
         public void DeleteMeteoStation(MeteoStation meteoStation)

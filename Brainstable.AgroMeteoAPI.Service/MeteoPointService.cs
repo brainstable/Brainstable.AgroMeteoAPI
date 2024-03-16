@@ -21,104 +21,104 @@ namespace Brainstable.AgroMeteoAPI.Service
             this.mapper = mapper;
         }
 
-        public IEnumerable<MeteoPointDto> GetAllDaysMeteoPoints(string meteoStationId, bool trackChanges)
+        public async Task<IEnumerable<MeteoPointDto>> GetAllDaysMeteoPointsAsync(string meteoStationId, bool trackChanges)
         {
-            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
+            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, trackChanges);
             if (meteoStation is null)
                 throw new MeteoStationNotFound(meteoStationId);
 
-            var meteoPoints = repository.MeteoPoint.GetAllDaysMeteoPoints(meteoStationId, trackChanges);
+            var meteoPoints = await repository.MeteoPoint.GetAllDaysMeteoPointsAsync(meteoStationId, trackChanges);
 
             var meteoPointsDto = mapper.Map<IEnumerable<MeteoPointDto>>(meteoPoints);
 
             return meteoPointsDto;
         }
 
-        public Dictionary<DateOnly, double?> GetAllDaysTemperature(string meteoStationId, bool trackChanges)
+        public async Task<Dictionary<DateOnly, double?>> GetAllDaysTemperatureAsync(string meteoStationId, bool trackChanges)
         {
-            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
+            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, trackChanges);
             if (meteoStation is null)
                 throw new MeteoStationNotFound(meteoStationId);
 
-            return repository.MeteoPoint.GetAllDaysTemperature(meteoStationId, trackChanges);
+            return await repository.MeteoPoint.GetAllDaysTemperatureAsync(meteoStationId, trackChanges);
         }
 
-        public MeteoPointDto GetMeteoPoint(string meteoStationId, DateOnly date, bool trackChanges)
+        public async Task<MeteoPointDto> GetMeteoPointAsync(string meteoStationId, DateOnly date, bool trackChanges)
         {
-            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
+            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, trackChanges);
             if (meteoStation is null)
                 throw new MeteoStationNotFound(meteoStationId);
 
-            var meteoPoint = repository.MeteoPoint.GetMeteoPoint(meteoStationId, date, trackChanges);
+            var meteoPoint = await repository.MeteoPoint.GetMeteoPointAsync(meteoStationId, date, trackChanges);
 
             var meteoPointDto = mapper.Map<MeteoPointDto>(meteoPoint);
 
             return meteoPointDto;
         }
 
-        public IEnumerable<MeteoPointDto> GetDaysMeteoPoints(string meteoStationId, DateOnly startDate, DateOnly endDate, bool trackChanges)
+        public async Task<IEnumerable<MeteoPointDto>> GetDaysMeteoPointsAsync(string meteoStationId, DateOnly startDate, DateOnly endDate, bool trackChanges)
         {
-            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
+            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, trackChanges);
             if (meteoStation is null)
                 throw new MeteoStationNotFound(meteoStationId);
 
-            var meteoPoints = repository.MeteoPoint.GetDaysMeteoPoints(meteoStationId, startDate, endDate, trackChanges);
+            var meteoPoints = await repository.MeteoPoint.GetDaysMeteoPointsAsync(meteoStationId, startDate, endDate, trackChanges);
 
             var meteoPointsDto = mapper.Map<IEnumerable<MeteoPointDto>>(meteoPoints);
 
             return meteoPointsDto;
         }
 
-        public MeteoPointDto CreateMeteoPointForMeteoStation(string meteoStationId, MeteoPointForCreationDto meteoPointForCreation,
+        public async Task<MeteoPointDto> CreateMeteoPointForMeteoStationAsync(string meteoStationId, MeteoPointForCreationDto meteoPointForCreation,
             bool trackChanges)
         {
-            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, trackChanges);
+            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, trackChanges);
             if (meteoStation is null)
                 throw new MeteoStationNotFound(meteoStationId);
 
             var meteoPoint = mapper.Map<MeteoPoint>(meteoPointForCreation);
 
             repository.MeteoPoint.CreateMeteoPointForMeteoStation(meteoStationId, meteoPoint);
-            repository.Save();
+            await repository.SaveAsync();
 
             var meteoPointToReturn = mapper.Map<MeteoPointDto>(meteoPoint);
 
             return meteoPointToReturn;
         }
 
-        public void DeleteMeteoPointForMeteoStation(string meteoStationId, DateOnly date, bool trackChanges)
+        public async Task DeleteMeteoPointForMeteoStationAsync(string meteoStationId, DateOnly date, bool trackChanges)
         {
-            var meteoPoint = repository.MeteoPoint.GetMeteoPoint(meteoStationId, date, trackChanges);
+            var meteoPoint = await repository.MeteoPoint.GetMeteoPointAsync(meteoStationId, date, trackChanges);
             if (meteoPoint is null)
                 throw new MeteoPointNotFound(meteoStationId, date);
 
             repository.MeteoPoint.DeleteMeteoPoint(meteoPoint);
-            repository.Save();
+            await repository.SaveAsync();
         }
 
-        public void UpdateMeteoPointForMeteoStation(string meteoStationId, DateOnly date, MeteoPointForUpdateDto meteoPointForUpdate,
+        public async Task UpdateMeteoPointForMeteoStationAsync(string meteoStationId, DateOnly date, MeteoPointForUpdateDto meteoPointForUpdate,
             bool stationTrackChanges, bool pointTrackChanges)
         {
-            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, stationTrackChanges);
+            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, stationTrackChanges);
             if (meteoStation is null)
                 throw new MeteoStationNotFound(meteoStationId);
 
-            var meteoPoint = repository.MeteoPoint.GetMeteoPoint(meteoStationId, date, pointTrackChanges);
+            var meteoPoint = await repository.MeteoPoint.GetMeteoPointAsync(meteoStationId, date, pointTrackChanges);
             if (meteoPoint is null)
                 throw new MeteoPointNotFound(meteoStationId, date);
 
             mapper.Map(meteoPointForUpdate, meteoPoint);
-            repository.Save();
+            await repository.SaveAsync();
         }
 
-        public (MeteoPointForUpdateDto meteoPointToPatch, MeteoPoint meteoPoint) GetMeteoPointForPatch(string meteoStationId,
+        public async Task<(MeteoPointForUpdateDto meteoPointToPatch, MeteoPoint meteoPoint)> GetMeteoPointForPatchAsync(string meteoStationId,
             DateOnly date, bool stationTrackChanges, bool pointTrackChanges)
         {
-            var meteoStation = repository.MeteoStation.GetMeteoStation(meteoStationId, stationTrackChanges);
+            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, stationTrackChanges);
             if (meteoStation is null)
                 throw new MeteoStationNotFound(meteoStationId);
 
-            var meteoPointEntity = repository.MeteoPoint.GetMeteoPoint(meteoStationId, date, pointTrackChanges);
+            var meteoPointEntity = await repository.MeteoPoint.GetMeteoPointAsync(meteoStationId, date, pointTrackChanges);
             if (meteoPointEntity is null)
                 throw new MeteoPointNotFound(meteoStationId, date);
 
@@ -127,10 +127,10 @@ namespace Brainstable.AgroMeteoAPI.Service
             return (meteoPointToPatch, meteoPointEntity);
         }
 
-        public void SaveChangesForPatch(MeteoPointForUpdateDto meteoPointToPatch, MeteoPoint meteoPoint)
+        public async Task SaveChangesForPatchAsync(MeteoPointForUpdateDto meteoPointToPatch, MeteoPoint meteoPoint)
         {
             mapper.Map(meteoPointToPatch, meteoPoint);
-            repository.Save();
+            await repository.SaveAsync();
         }
     }
 }

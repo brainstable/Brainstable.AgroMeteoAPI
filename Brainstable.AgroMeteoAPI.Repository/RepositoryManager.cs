@@ -19,6 +19,6 @@ namespace Brainstable.AgroMeteoAPI.Repository
 
         public IMeteoPointRepository MeteoPoint => meteoPointRepository.Value;
 
-        public void Save() => repositoryContext.SaveChanges();
+        public Task SaveAsync() => repositoryContext.SaveChangesAsync();
     }
 }

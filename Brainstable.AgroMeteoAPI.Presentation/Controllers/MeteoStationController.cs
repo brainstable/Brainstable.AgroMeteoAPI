@@ -14,23 +14,23 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         public MeteoStationController(IServiceManager service) => this.service = service;
 
         [HttpGet]
-        public IActionResult GetMeteoStations()
+        public async Task<IActionResult> GetMeteoStations()
         {
-            var meteoStations = service.MeteoStationService.GetAllMeteoStations(trackChanges: false);
+            var meteoStations = await service.MeteoStationService.GetAllMeteoStationsAsync(trackChanges: false);
 
             return Ok(meteoStations);
         }
 
         [HttpGet("{meteoStationId}", Name = "MeteoStationById")]
-        public IActionResult GetMeteoStation(string meteoStationId)
+        public async Task<IActionResult> GetMeteoStation(string meteoStationId)
         {
-            var meteoStation = service.MeteoStationService.GetMeteoStation(meteoStationId, false);
+            var meteoStation = await service.MeteoStationService.GetMeteoStationAsync(meteoStationId, false);
             
             return Ok(meteoStation);
         }
 
         [HttpPost]
-        public IActionResult CreateMeteoStation([FromBody] MeteoStationForCreationDto meteoStation)
+        public async Task<IActionResult> CreateMeteoStation([FromBody] MeteoStationForCreationDto meteoStation)
         {
             if (meteoStation is null)
                 return BadRequest("MeteoStationForCreationDto object is null");
@@ -38,43 +38,43 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
 
-            var createdMeteoStation = service.MeteoStationService.CreateMeteoStation(meteoStation);
+            var createdMeteoStation = await service.MeteoStationService.CreateMeteoStationAsync(meteoStation);
 
             return CreatedAtRoute("MeteoStationById", new { meteoStationId = createdMeteoStation.MeteoStationId },
                 createdMeteoStation);
         }
 
         [HttpGet("collection/({ids})", Name = "MeteoStationCollection")]
-        public IActionResult GetMeteoStationCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))][FromRoute(Name = "ids")]IEnumerable<string> ids)
+        public async Task<IActionResult> GetMeteoStationCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))][FromRoute(Name = "ids")]IEnumerable<string> ids)
         {
-            var meteoStations = service.MeteoStationService.GetByIds(ids, false);
+            var meteoStations = await service.MeteoStationService.GetByIdsAsync(ids, false);
 
             return Ok(meteoStations);
         }
 
         [HttpPost("collection")]
-        public IActionResult CreateMeteoStationCollection([FromBody] IEnumerable<MeteoStationForCreationDto> meteStationCollection)
+        public async Task<IActionResult> CreateMeteoStationCollection([FromBody] IEnumerable<MeteoStationForCreationDto> meteStationCollection)
         {
-            var result = service.MeteoStationService.CreateMeteoStationCollection(meteStationCollection);
+            var result = await service.MeteoStationService.CreateMeteoStationCollectionAsync(meteStationCollection);
 
             return CreatedAtRoute("MeteoStationCollection", new { result.ids }, result.meteoStations);
         }
 
         [HttpDelete("{meteoStationId}")]
-        public IActionResult DeleteMeteoStation(string meteoStationId)
+        public async Task<IActionResult> DeleteMeteoStation(string meteoStationId)
         {
-            service.MeteoStationService.DeleteMeteoStation(meteoStationId, false);
+            await service.MeteoStationService.DeleteMeteoStationAsync(meteoStationId, false);
 
             return NoContent();
         }
 
         [HttpPut("{meteoStationId}")]
-        public IActionResult UpdateMeteoStation(string meteoStationId, [FromBody] MeteoStationForUpdateDto meteoStation)
+        public async Task<IActionResult> UpdateMeteoStation(string meteoStationId, [FromBody] MeteoStationForUpdateDto meteoStation)
         {
             if (meteoStation is null)
                 return BadRequest("MeteoStationForUpdate object is null");
 
-            service.MeteoStationService.UpdateMeteoStation(meteoStationId, meteoStation, true);
+            await service.MeteoStationService.UpdateMeteoStationAsync(meteoStationId, meteoStation, true);
 
             return NoContent();
         }

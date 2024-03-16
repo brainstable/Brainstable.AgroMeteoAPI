@@ -4,13 +4,12 @@ namespace Brainstable.AgroMeteoAPI.Service.Contracts
 {
     public interface IMeteoStationService
     {
-        IEnumerable<MeteoStationDto> GetAllMeteoStations(bool trackChanges);
-        MeteoStationDto GetMeteoStation(string meteoStationId, bool trackChanges);
-        MeteoStationDto CreateMeteoStation(MeteoStationForCreationDto meteoStation);
-        IEnumerable<MeteoStationDto> GetByIds(IEnumerable<string> ids, bool trackChanges);
-        (IEnumerable<MeteoStationDto> meteoStations, string ids) CreateMeteoStationCollection(
-            IEnumerable<MeteoStationForCreationDto> meteoStationCollection);
-        void DeleteMeteoStation(string meteoStationId, bool trackChanges);
-        void UpdateMeteoStation(string meteoStationId, MeteoStationForUpdateDto meteoStationUpdate, bool trackChanges);
+        Task<IEnumerable<MeteoStationDto>> GetAllMeteoStationsAsync(bool trackChanges);
+        Task<MeteoStationDto> GetMeteoStationAsync(string meteoStationId, bool trackChanges);
+        Task<MeteoStationDto> CreateMeteoStationAsync(MeteoStationForCreationDto meteoStation);
+        Task<IEnumerable<MeteoStationDto>> GetByIdsAsync(IEnumerable<string> ids, bool trackChanges);
+        Task<(IEnumerable<MeteoStationDto> meteoStations, string ids)> CreateMeteoStationCollectionAsync(IEnumerable<MeteoStationForCreationDto> meteoStationCollection);
+        Task DeleteMeteoStationAsync(string meteoStationId, bool trackChanges);
+        Task UpdateMeteoStationAsync(string meteoStationId, MeteoStationForUpdateDto meteoStationUpdate, bool trackChanges);
     }
 }

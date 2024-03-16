@@ -5,19 +5,14 @@ namespace Brainstable.AgroMeteoAPI.Service.Contracts
 {
     public interface IMeteoPointService
     {
-        IEnumerable<MeteoPointDto> GetAllDaysMeteoPoints(string meteoStationId, bool trackChanges);
-        Dictionary<DateOnly, double?> GetAllDaysTemperature(string meteoStationId, bool trackChanges);
-        MeteoPointDto GetMeteoPoint(string meteoStationId, DateOnly date, bool trackChanges);
-        IEnumerable<MeteoPointDto> GetDaysMeteoPoints(string meteoStationId, DateOnly startDate, DateOnly endDate, bool trackChanges);
-
-        MeteoPointDto CreateMeteoPointForMeteoStation(string meteoStationId,
-            MeteoPointForCreationDto meteoPointForCreation, bool trackChanges);
-
-        void DeleteMeteoPointForMeteoStation(string meteoStationId, DateOnly date, bool trackChanges);
-        void UpdateMeteoPointForMeteoStation(string meteoStationId, DateOnly date, MeteoPointForUpdateDto meteoPointForUpdate, bool stationTrackChanges, bool pointTrackChanges); 
-
-        (MeteoPointForUpdateDto meteoPointToPatch, MeteoPoint meteoPoint) GetMeteoPointForPatch(string meteoStationId, DateOnly date, bool stationTrackChanges, bool pointTrackChanges);
-        void SaveChangesForPatch(MeteoPointForUpdateDto meteoPointToPatch, MeteoPoint meteoPoint);
-
+        Task<IEnumerable<MeteoPointDto>> GetAllDaysMeteoPointsAsync(string meteoStationId, bool trackChanges);
+        Task<Dictionary<DateOnly, double?>> GetAllDaysTemperatureAsync(string meteoStationId, bool trackChanges);
+        Task<MeteoPointDto> GetMeteoPointAsync(string meteoStationId, DateOnly date, bool trackChanges);
+        Task<IEnumerable<MeteoPointDto>> GetDaysMeteoPointsAsync(string meteoStationId, DateOnly startDate, DateOnly endDate, bool trackChanges);
+        Task<MeteoPointDto> CreateMeteoPointForMeteoStationAsync(string meteoStationId, MeteoPointForCreationDto meteoPointForCreation, bool trackChanges);
+        Task DeleteMeteoPointForMeteoStationAsync(string meteoStationId, DateOnly date, bool trackChanges);
+        Task UpdateMeteoPointForMeteoStationAsync(string meteoStationId, DateOnly date, MeteoPointForUpdateDto meteoPointForUpdate, bool stationTrackChanges, bool pointTrackChanges); 
+        Task<(MeteoPointForUpdateDto meteoPointToPatch, MeteoPoint meteoPoint)> GetMeteoPointForPatchAsync(string meteoStationId, DateOnly date, bool stationTrackChanges, bool pointTrackChanges);
+        Task SaveChangesForPatchAsync(MeteoPointForUpdateDto meteoPointToPatch, MeteoPoint meteoPoint);
     }
 }

@@ -4,6 +4,6 @@
     {
         IMeteoStationRepository MeteoStation {  get; }
         IMeteoPointRepository MeteoPoint { get; }
-        void Save();
+        Task SaveAsync();
     }
 }
