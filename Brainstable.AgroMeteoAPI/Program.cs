@@ -1,5 +1,6 @@
 using Brainstable.AgroMeteoAPI;
 using Brainstable.AgroMeteoAPI.Extensions;
+using Brainstable.AgroMeteoAPI.Presentation.ActionFilters;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -21,6 +22,8 @@ builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+builder.Services.AddScoped<ValidationFilterAttribute>();
 
 builder.Services.AddSwaggerGen(x =>
 {

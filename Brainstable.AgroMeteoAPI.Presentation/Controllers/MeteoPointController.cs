@@ -1,4 +1,5 @@
-﻿using Brainstable.AgroMeteoAPI.Service.Contracts;
+﻿using Brainstable.AgroMeteoAPI.Presentation.ActionFilters;
+using Brainstable.AgroMeteoAPI.Service.Contracts;
 using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -61,15 +62,10 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateMeteoPointForMeteoStation(string meteoStationId,
             [FromBody] MeteoPointForCreationDto meteoPoint)
         {
-            if (meteoPoint is null)
-                return BadRequest("MeteoPointForMeteoStation object is null");
-
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
-
             var meteoPointToReturn = await service.MeteoPointService.CreateMeteoPointForMeteoStationAsync(meteoStationId, meteoPoint, false);
 
             return CreatedAtRoute("GetMeteoPointForMeteoStation", new { meteoStationId },
@@ -87,12 +83,10 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         }
 
         [HttpPut("{date}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> UpdateMeteoPointForMeteoStation(string meteoStationId, string date,
             [FromBody] MeteoPointForUpdateDto meteoPoint)
         {
-            if (meteoPoint is null)
-                return BadRequest("MeteoPointForUpdateDto object is null");
-
             DateOnly dateOnly = DateOnly.Parse(date);
 
             await service.MeteoPointService.UpdateMeteoPointForMeteoStationAsync(meteoStationId, dateOnly, meteoPoint, false, true);

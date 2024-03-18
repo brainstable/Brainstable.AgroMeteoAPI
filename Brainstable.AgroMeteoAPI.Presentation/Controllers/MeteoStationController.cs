@@ -1,4 +1,5 @@
-﻿using Brainstable.AgroMeteoAPI.Presentation.ModelBinders;
+﻿using Brainstable.AgroMeteoAPI.Presentation.ActionFilters;
+using Brainstable.AgroMeteoAPI.Presentation.ModelBinders;
 using Brainstable.AgroMeteoAPI.Service.Contracts;
 using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
@@ -30,14 +31,9 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateMeteoStation([FromBody] MeteoStationForCreationDto meteoStation)
         {
-            if (meteoStation is null)
-                return BadRequest("MeteoStationForCreationDto object is null");
-
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
-
             var createdMeteoStation = await service.MeteoStationService.CreateMeteoStationAsync(meteoStation);
 
             return CreatedAtRoute("MeteoStationById", new { meteoStationId = createdMeteoStation.MeteoStationId },
@@ -53,6 +49,7 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         }
 
         [HttpPost("collection")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateMeteoStationCollection([FromBody] IEnumerable<MeteoStationForCreationDto> meteStationCollection)
         {
             var result = await service.MeteoStationService.CreateMeteoStationCollectionAsync(meteStationCollection);
@@ -69,11 +66,9 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         }
 
         [HttpPut("{meteoStationId}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> UpdateMeteoStation(string meteoStationId, [FromBody] MeteoStationForUpdateDto meteoStation)
         {
-            if (meteoStation is null)
-                return BadRequest("MeteoStationForUpdate object is null");
-
             await service.MeteoStationService.UpdateMeteoStationAsync(meteoStationId, meteoStation, true);
 
             return NoContent();
