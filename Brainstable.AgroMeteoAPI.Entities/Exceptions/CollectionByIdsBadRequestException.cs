@@ -1,7 +1,7 @@
 ﻿namespace Brainstable.AgroMeteoAPI.Entities.Exceptions;
 
-public sealed class CollectionByIdsBadRequest : BadRequestException
+public sealed class CollectionByIdsBadRequestException : BadRequestException
 {
-    public CollectionByIdsBadRequest()
+    public CollectionByIdsBadRequestException()
         : base("Collection count mismatch comparing to ids") { }
 }

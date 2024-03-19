@@ -32,9 +32,7 @@ namespace Brainstable.AgroMeteoAPI.Service
 
         public async Task<MeteoStationDto> GetMeteoStationAsync(string meteoStationId, bool trackChanges)
         {
-            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, trackChanges);
-            if (meteoStation is null)
-                throw new MeteoStationNotFound(meteoStationId);
+            var meteoStation = await GetMeteoStationAndCheckIfItExists(meteoStationId, trackChanges);
 
             var meteoStationDto = mapper.Map<MeteoStationDto>(meteoStation);
             return meteoStationDto;
@@ -55,12 +53,12 @@ namespace Brainstable.AgroMeteoAPI.Service
         public async Task<IEnumerable<MeteoStationDto>> GetByIdsAsync(IEnumerable<string> ids, bool trackChanges)
         {
             if (ids is null)
-                throw new IdParametersBadRequest();
+                throw new IdParametersBadRequestException();
 
             var meteoStations = await repository.MeteoStation.GetByIdsAsync(ids, trackChanges);
 
             if (ids.Count() != meteoStations.Count())
-                throw new CollectionByIdsBadRequest();
+                throw new CollectionByIdsBadRequestException();
 
             var meteoStationsToReturn = mapper.Map<IEnumerable<MeteoStationDto>>(meteoStations);
 
@@ -70,7 +68,7 @@ namespace Brainstable.AgroMeteoAPI.Service
         public async Task<(IEnumerable<MeteoStationDto> meteoStations, string ids)> CreateMeteoStationCollectionAsync(IEnumerable<MeteoStationForCreationDto> meteoStationCollection)
         {
             if (meteoStationCollection is null)
-                throw new MeteoStationCollectionBadRequest();
+                throw new MeteoStationCollectionBadRequestException();
 
             var meteoStations = mapper.Map<IEnumerable<MeteoStation>>(meteoStationCollection);
             foreach (var meteoStation in meteoStations)
@@ -88,9 +86,7 @@ namespace Brainstable.AgroMeteoAPI.Service
 
         public async Task DeleteMeteoStationAsync(string meteoStationId, bool trackChanges)
         {
-            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, trackChanges);
-            if (meteoStation is null)
-                throw new MeteoStationNotFound(meteoStationId);
+            var meteoStation = await GetMeteoStationAndCheckIfItExists(meteoStationId, trackChanges);
 
             repository.MeteoStation.DeleteMeteoStation(meteoStation);
             await repository.SaveAsync();
@@ -98,12 +94,19 @@ namespace Brainstable.AgroMeteoAPI.Service
 
         public async Task UpdateMeteoStationAsync(string meteoStationId, MeteoStationForUpdateDto meteoStationUpdate, bool trackChanges)
         {
-            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, trackChanges);
-            if (meteoStation is null)
-                throw new MeteoStationNotFound(meteoStationId);
+            var meteoStation = await GetMeteoStationAndCheckIfItExists(meteoStationId, trackChanges);
 
             mapper.Map(meteoStationUpdate, meteoStation);
             await repository.SaveAsync();
+        }
+
+        private async Task<MeteoStation> GetMeteoStationAndCheckIfItExists(string meteoStationId, bool trackChanges)
+        {
+            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, trackChanges);
+            if (meteoStation is null)
+                throw new MeteoStationNotFoundException(meteoStationId);
+
+            return meteoStation;
         }
     }
 }

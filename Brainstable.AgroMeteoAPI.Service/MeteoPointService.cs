@@ -23,9 +23,7 @@ namespace Brainstable.AgroMeteoAPI.Service
 
         public async Task<IEnumerable<MeteoPointDto>> GetAllDaysMeteoPointsAsync(string meteoStationId, bool trackChanges)
         {
-            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, trackChanges);
-            if (meteoStation is null)
-                throw new MeteoStationNotFound(meteoStationId);
+            await CheckIfMeteoStationExists(meteoStationId, trackChanges);
 
             var meteoPoints = await repository.MeteoPoint.GetAllDaysMeteoPointsAsync(meteoStationId, trackChanges);
 
@@ -36,20 +34,16 @@ namespace Brainstable.AgroMeteoAPI.Service
 
         public async Task<Dictionary<DateOnly, double?>> GetAllDaysTemperatureAsync(string meteoStationId, bool trackChanges)
         {
-            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, trackChanges);
-            if (meteoStation is null)
-                throw new MeteoStationNotFound(meteoStationId);
+            await CheckIfMeteoStationExists(meteoStationId, trackChanges);
 
             return await repository.MeteoPoint.GetAllDaysTemperatureAsync(meteoStationId, trackChanges);
         }
 
         public async Task<MeteoPointDto> GetMeteoPointAsync(string meteoStationId, DateOnly date, bool trackChanges)
         {
-            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, trackChanges);
-            if (meteoStation is null)
-                throw new MeteoStationNotFound(meteoStationId);
+            await CheckIfMeteoStationExists(meteoStationId, trackChanges);
 
-            var meteoPoint = await repository.MeteoPoint.GetMeteoPointAsync(meteoStationId, date, trackChanges);
+            var meteoPoint = await GetMeteoPointForMeteoStationAndCheckIfItExists(meteoStationId, date, trackChanges);
 
             var meteoPointDto = mapper.Map<MeteoPointDto>(meteoPoint);
 
@@ -58,9 +52,7 @@ namespace Brainstable.AgroMeteoAPI.Service
 
         public async Task<IEnumerable<MeteoPointDto>> GetDaysMeteoPointsAsync(string meteoStationId, DateOnly startDate, DateOnly endDate, bool trackChanges)
         {
-            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, trackChanges);
-            if (meteoStation is null)
-                throw new MeteoStationNotFound(meteoStationId);
+            await CheckIfMeteoStationExists(meteoStationId, trackChanges);
 
             var meteoPoints = await repository.MeteoPoint.GetDaysMeteoPointsAsync(meteoStationId, startDate, endDate, trackChanges);
 
@@ -72,9 +64,7 @@ namespace Brainstable.AgroMeteoAPI.Service
         public async Task<MeteoPointDto> CreateMeteoPointForMeteoStationAsync(string meteoStationId, MeteoPointForCreationDto meteoPointForCreation,
             bool trackChanges)
         {
-            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, trackChanges);
-            if (meteoStation is null)
-                throw new MeteoStationNotFound(meteoStationId);
+            await CheckIfMeteoStationExists(meteoStationId, trackChanges);
 
             var meteoPoint = mapper.Map<MeteoPoint>(meteoPointForCreation);
 
@@ -88,9 +78,7 @@ namespace Brainstable.AgroMeteoAPI.Service
 
         public async Task DeleteMeteoPointForMeteoStationAsync(string meteoStationId, DateOnly date, bool trackChanges)
         {
-            var meteoPoint = await repository.MeteoPoint.GetMeteoPointAsync(meteoStationId, date, trackChanges);
-            if (meteoPoint is null)
-                throw new MeteoPointNotFound(meteoStationId, date);
+            var meteoPoint = await GetMeteoPointForMeteoStationAndCheckIfItExists(meteoStationId, date, trackChanges);
 
             repository.MeteoPoint.DeleteMeteoPoint(meteoPoint);
             await repository.SaveAsync();
@@ -99,13 +87,9 @@ namespace Brainstable.AgroMeteoAPI.Service
         public async Task UpdateMeteoPointForMeteoStationAsync(string meteoStationId, DateOnly date, MeteoPointForUpdateDto meteoPointForUpdate,
             bool stationTrackChanges, bool pointTrackChanges)
         {
-            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, stationTrackChanges);
-            if (meteoStation is null)
-                throw new MeteoStationNotFound(meteoStationId);
+            await CheckIfMeteoStationExists(meteoStationId, stationTrackChanges);
 
-            var meteoPoint = await repository.MeteoPoint.GetMeteoPointAsync(meteoStationId, date, pointTrackChanges);
-            if (meteoPoint is null)
-                throw new MeteoPointNotFound(meteoStationId, date);
+            var meteoPoint = await GetMeteoPointForMeteoStationAndCheckIfItExists(meteoStationId, date, pointTrackChanges);
 
             mapper.Map(meteoPointForUpdate, meteoPoint);
             await repository.SaveAsync();
@@ -114,13 +98,9 @@ namespace Brainstable.AgroMeteoAPI.Service
         public async Task<(MeteoPointForUpdateDto meteoPointToPatch, MeteoPoint meteoPoint)> GetMeteoPointForPatchAsync(string meteoStationId,
             DateOnly date, bool stationTrackChanges, bool pointTrackChanges)
         {
-            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, stationTrackChanges);
-            if (meteoStation is null)
-                throw new MeteoStationNotFound(meteoStationId);
+            await CheckIfMeteoStationExists(meteoStationId, stationTrackChanges);
 
-            var meteoPointEntity = await repository.MeteoPoint.GetMeteoPointAsync(meteoStationId, date, pointTrackChanges);
-            if (meteoPointEntity is null)
-                throw new MeteoPointNotFound(meteoStationId, date);
+            var meteoPointEntity = await GetMeteoPointForMeteoStationAndCheckIfItExists(meteoStationId, date, pointTrackChanges);
 
             var meteoPointToPatch = mapper.Map<MeteoPointForUpdateDto>(meteoPointEntity);
 
@@ -132,5 +112,26 @@ namespace Brainstable.AgroMeteoAPI.Service
             mapper.Map(meteoPointToPatch, meteoPoint);
             await repository.SaveAsync();
         }
+
+        #region Private methods
+
+        private async Task<MeteoPoint?> GetMeteoPointForMeteoStationAndCheckIfItExists(string meteoStationId, DateOnly date,
+            bool trackChanges)
+        {
+            var meteoPoint = await repository.MeteoPoint.GetMeteoPointAsync(meteoStationId, date, trackChanges);
+            if (meteoPoint is null)
+                throw new MeteoPointNotFoundException(meteoStationId, date);
+            return meteoPoint;
+        }
+
+        private async Task CheckIfMeteoStationExists(string meteoStationId, bool trackChanges)
+        {
+            var meteoStation = await repository.MeteoStation.GetMeteoStationAsync(meteoStationId, trackChanges);
+            if (meteoStation is null)
+                throw new MeteoStationNotFoundException(meteoStationId);
+        }
+
+        #endregion
+
     }
 }
