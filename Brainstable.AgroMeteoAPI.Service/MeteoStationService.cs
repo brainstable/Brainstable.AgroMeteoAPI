@@ -5,6 +5,7 @@ using Brainstable.AgroMeteoAPI.Entities.Exceptions;
 using Brainstable.AgroMeteoAPI.Entities.Models;
 using Brainstable.AgroMeteoAPI.Service.Contracts;
 using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
+using Brainstable.AgroMeteoAPI.Shared.RequestParameters;
 
 namespace Brainstable.AgroMeteoAPI.Service
 {
@@ -24,6 +25,15 @@ namespace Brainstable.AgroMeteoAPI.Service
         public async Task<IEnumerable<MeteoStationDto>> GetAllMeteoStationsAsync(bool trackChanges)
         {
             var meteoStations = await repository.MeteoStation.GetAllMeteoStationsAsync(trackChanges);
+
+            var meteoStationsDto = mapper.Map<IEnumerable<MeteoStationDto>>(meteoStations);
+
+            return meteoStationsDto;
+        }
+
+        public async Task<IEnumerable<MeteoStationDto>> GetAllMeteoStationsAsync(MeteoStationParameters meteoStationParameters, bool trackChanges)
+        {
+            var meteoStations = await repository.MeteoStation.GetAllMeteoStationsAsync(meteoStationParameters, trackChanges);
 
             var meteoStationsDto = mapper.Map<IEnumerable<MeteoStationDto>>(meteoStations);
 

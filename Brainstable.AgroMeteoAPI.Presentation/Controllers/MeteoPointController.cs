@@ -1,6 +1,7 @@
 ﻿using Brainstable.AgroMeteoAPI.Presentation.ActionFilters;
 using Brainstable.AgroMeteoAPI.Service.Contracts;
 using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
+using Brainstable.AgroMeteoAPI.Shared.RequestParameters;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,9 +20,10 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 
         [HttpGet]
         [Route("alldays")]
-        public async Task<IActionResult> GetAllDaysMeteoPoints(string meteoStationId)
+        public async Task<IActionResult> GetAllDaysMeteoPoints(string meteoStationId,
+            [FromQuery] MeteoPointParameters meteoPointParameters)
         {
-            var allDaysMeteoPoints = await service.MeteoPointService.GetAllDaysMeteoPointsAsync(meteoStationId, false);
+            var allDaysMeteoPoints = await service.MeteoPointService.GetAllDaysMeteoPointsAsync(meteoStationId, meteoPointParameters, false);
 
             return Ok(allDaysMeteoPoints);
         }
@@ -39,9 +41,10 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 
         [HttpGet]
         [Route("talldays")]
-        public async Task<IActionResult> GetAllDaysTemperature(string meteoStationId)
+        public async Task<IActionResult> GetAllDaysTemperature(string meteoStationId,
+            [FromQuery] MeteoPointParameters meteoPointParameters)
         {
-            var allDays = await service.MeteoPointService.GetAllDaysTemperatureAsync(meteoStationId, false);
+            var allDays = await service.MeteoPointService.GetAllDaysTemperatureAsync(meteoStationId, meteoPointParameters, false);
 
             return Ok(allDays);
         }

@@ -5,6 +5,7 @@ using Brainstable.AgroMeteoAPI.Entities.Exceptions;
 using Brainstable.AgroMeteoAPI.Entities.Models;
 using Brainstable.AgroMeteoAPI.Service.Contracts;
 using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
+using Brainstable.AgroMeteoAPI.Shared.RequestParameters;
 
 namespace Brainstable.AgroMeteoAPI.Service
 {
@@ -21,22 +22,22 @@ namespace Brainstable.AgroMeteoAPI.Service
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<MeteoPointDto>> GetAllDaysMeteoPointsAsync(string meteoStationId, bool trackChanges)
+        public async Task<IEnumerable<MeteoPointDto>> GetAllDaysMeteoPointsAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges)
         {
             await CheckIfMeteoStationExists(meteoStationId, trackChanges);
 
-            var meteoPoints = await repository.MeteoPoint.GetAllDaysMeteoPointsAsync(meteoStationId, trackChanges);
+            var meteoPoints = await repository.MeteoPoint.GetAllDaysMeteoPointsAsync(meteoStationId, meteoPointParameters, trackChanges);
 
             var meteoPointsDto = mapper.Map<IEnumerable<MeteoPointDto>>(meteoPoints);
 
             return meteoPointsDto;
         }
 
-        public async Task<Dictionary<DateOnly, double?>> GetAllDaysTemperatureAsync(string meteoStationId, bool trackChanges)
+        public async Task<Dictionary<DateOnly, double?>> GetAllDaysTemperatureAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges)
         {
             await CheckIfMeteoStationExists(meteoStationId, trackChanges);
 
-            return await repository.MeteoPoint.GetAllDaysTemperatureAsync(meteoStationId, trackChanges);
+            return await repository.MeteoPoint.GetAllDaysTemperatureAsync(meteoStationId, meteoPointParameters, trackChanges);
         }
 
         public async Task<MeteoPointDto> GetMeteoPointAsync(string meteoStationId, DateOnly date, bool trackChanges)

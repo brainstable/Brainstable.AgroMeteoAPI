@@ -1,5 +1,6 @@
 ﻿using Brainstable.AgroMeteoAPI.Contracts;
 using Brainstable.AgroMeteoAPI.Entities.Models;
+using Brainstable.AgroMeteoAPI.Shared.RequestParameters;
 using Microsoft.EntityFrameworkCore;
 
 namespace Brainstable.AgroMeteoAPI.Repository
@@ -11,12 +12,16 @@ namespace Brainstable.AgroMeteoAPI.Repository
         {
         }
 
-        public async Task<IEnumerable<MeteoPoint>> GetAllDaysMeteoPointsAsync(string meteoStationId, bool trackChanges)
+        public async Task<IEnumerable<MeteoPoint>> GetAllDaysMeteoPointsAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges)
         {
-            return await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges).ToListAsync();
+            return await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
+                .OrderBy(x => x.Date)
+                .Skip((meteoPointParameters.PageNumber - 1) * meteoPointParameters.PageSize)
+                .Take(meteoPointParameters.PageSize)
+                .ToListAsync();
         }
 
-        public async Task<Dictionary<DateOnly, double?>> GetAllDaysTemperatureAsync(string meteoStationId, bool trackChanges)
+        public async Task<Dictionary<DateOnly, double?>> GetAllDaysTemperatureAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges)
         {
             var meteoPoints = await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
                 .Select(x => new
@@ -24,6 +29,9 @@ namespace Brainstable.AgroMeteoAPI.Repository
                     Date = x.Date,
                     Temperature = x.Temperature
                 })
+                .OrderBy(x => x.Date)
+                .Skip((meteoPointParameters.PageNumber - 1) * meteoPointParameters.PageSize)
+                .Take(meteoPointParameters.PageSize)
                 .ToListAsync();
 
             Dictionary<DateOnly, double?> allDaysTemperature = new Dictionary<DateOnly, double?>();

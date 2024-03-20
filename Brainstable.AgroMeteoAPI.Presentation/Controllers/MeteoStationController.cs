@@ -2,6 +2,7 @@
 using Brainstable.AgroMeteoAPI.Presentation.ModelBinders;
 using Brainstable.AgroMeteoAPI.Service.Contracts;
 using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
+using Brainstable.AgroMeteoAPI.Shared.RequestParameters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
@@ -14,10 +15,23 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 
         public MeteoStationController(IServiceManager service) => this.service = service;
 
+        //[HttpGet]
+        //public async Task<IActionResult> GetMeteoStations()
+        //{
+        //    var meteoStations = await service.MeteoStationService.GetAllMeteoStationsAsync(trackChanges: false);
+
+        //    return Ok(meteoStations);
+        //}
+
         [HttpGet]
-        public async Task<IActionResult> GetMeteoStations()
+        public async Task<IActionResult> GetMeteoStations([FromQuery] MeteoStationParameters meteoStationParameters)
         {
-            var meteoStations = await service.MeteoStationService.GetAllMeteoStationsAsync(trackChanges: false);
+            IEnumerable<MeteoStationDto> meteoStations = new List<MeteoStationDto>();
+            
+            if (meteoStationParameters is null)
+                meteoStations = await service.MeteoStationService.GetAllMeteoStationsAsync(trackChanges: false);
+            else
+                meteoStations = await service.MeteoStationService.GetAllMeteoStationsAsync(meteoStationParameters: meteoStationParameters, trackChanges: false);
 
             return Ok(meteoStations);
         }

@@ -1,5 +1,6 @@
 ﻿using Brainstable.AgroMeteoAPI.Contracts;
 using Brainstable.AgroMeteoAPI.Entities.Models;
+using Brainstable.AgroMeteoAPI.Shared.RequestParameters;
 using Microsoft.EntityFrameworkCore;
 
 namespace Brainstable.AgroMeteoAPI.Repository
@@ -15,6 +16,15 @@ namespace Brainstable.AgroMeteoAPI.Repository
             await FindAll(trackChanges)
                 .OrderBy(x => x.Name)
                 .ToListAsync();
+
+        public async Task<IEnumerable<MeteoStation>> GetAllMeteoStationsAsync(MeteoStationParameters meteoStationParameters, bool trackChanges)
+        {
+            return await FindAll(trackChanges)
+                .OrderBy(x => x.Name)
+                .Skip((meteoStationParameters.PageNumber - 1) * meteoStationParameters.PageSize)
+                .Take(meteoStationParameters.PageSize)
+                .ToListAsync();
+        }
 
         public async Task<MeteoStation> GetMeteoStationAsync(string meteoStationId, bool trackChanges) =>
             await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
