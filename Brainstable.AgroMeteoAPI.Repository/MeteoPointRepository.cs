@@ -12,13 +12,18 @@ namespace Brainstable.AgroMeteoAPI.Repository
         {
         }
 
-        public async Task<IEnumerable<MeteoPoint>> GetAllDaysMeteoPointsAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges)
+        public async Task<PagedList<MeteoPoint>> GetAllDaysMeteoPointsAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges)
         {
-            return await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
+            var meteoPoints = await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
                 .OrderBy(x => x.Date)
                 .Skip((meteoPointParameters.PageNumber - 1) * meteoPointParameters.PageSize)
                 .Take(meteoPointParameters.PageSize)
                 .ToListAsync();
+
+            var count = await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
+                .CountAsync();
+
+            return new PagedList<MeteoPoint>(meteoPoints, count, meteoPointParameters.PageNumber, meteoPointParameters.PageSize);
         }
 
         public async Task<Dictionary<DateOnly, double?>> GetAllDaysTemperatureAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges)

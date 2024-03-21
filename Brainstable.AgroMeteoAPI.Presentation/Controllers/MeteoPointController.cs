@@ -1,4 +1,5 @@
-﻿using Brainstable.AgroMeteoAPI.Presentation.ActionFilters;
+﻿using System.Text.Json;
+using Brainstable.AgroMeteoAPI.Presentation.ActionFilters;
 using Brainstable.AgroMeteoAPI.Service.Contracts;
 using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 using Brainstable.AgroMeteoAPI.Shared.RequestParameters;
@@ -23,9 +24,11 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         public async Task<IActionResult> GetAllDaysMeteoPoints(string meteoStationId,
             [FromQuery] MeteoPointParameters meteoPointParameters)
         {
-            var allDaysMeteoPoints = await service.MeteoPointService.GetAllDaysMeteoPointsAsync(meteoStationId, meteoPointParameters, false);
+            var pagedResult = await service.MeteoPointService.GetAllDaysMeteoPointsAsync(meteoStationId, meteoPointParameters, false);
 
-            return Ok(allDaysMeteoPoints);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+
+            return Ok(pagedResult.meteoPoints);
         }
 
         [HttpGet]

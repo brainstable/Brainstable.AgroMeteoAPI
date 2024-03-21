@@ -22,15 +22,15 @@ namespace Brainstable.AgroMeteoAPI.Service
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<MeteoPointDto>> GetAllDaysMeteoPointsAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges)
+        public async Task<(IEnumerable<MeteoPointDto> meteoPoints, MetaData metaData)> GetAllDaysMeteoPointsAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges)
         {
             await CheckIfMeteoStationExists(meteoStationId, trackChanges);
 
-            var meteoPoints = await repository.MeteoPoint.GetAllDaysMeteoPointsAsync(meteoStationId, meteoPointParameters, trackChanges);
+            var meteoPointsWithMetaData = await repository.MeteoPoint.GetAllDaysMeteoPointsAsync(meteoStationId, meteoPointParameters, trackChanges);
 
-            var meteoPointsDto = mapper.Map<IEnumerable<MeteoPointDto>>(meteoPoints);
+            var meteoPointsDto = mapper.Map<IEnumerable<MeteoPointDto>>(meteoPointsWithMetaData);
 
-            return meteoPointsDto;
+            return (meteoPointsDto, meteoPointsWithMetaData.MetaData);
         }
 
         public async Task<Dictionary<DateOnly, double?>> GetAllDaysTemperatureAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges)
