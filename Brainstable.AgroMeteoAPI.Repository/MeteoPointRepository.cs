@@ -14,13 +14,21 @@ namespace Brainstable.AgroMeteoAPI.Repository
 
         public async Task<PagedList<MeteoPoint>> GetAllDaysMeteoPointsAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges)
         {
-            var meteoPoints = await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
+            bool del(MeteoPoint x)
+            {
+                return 
+            }
+
+            
+            var meteoPoints = await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId) 
+                                                         && (x.Date >= meteoPointParameters.MinDate && x.Date <= meteoPointParameters.MaxDate), trackChanges)
                 .OrderBy(x => x.Date)
                 .Skip((meteoPointParameters.PageNumber - 1) * meteoPointParameters.PageSize)
                 .Take(meteoPointParameters.PageSize)
                 .ToListAsync();
 
-            var count = await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
+            var count = await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId) 
+                                                   && (x.Date >= meteoPointParameters.MinDate && x.Date <= meteoPointParameters.MaxDate), trackChanges)
                 .CountAsync();
 
             return new PagedList<MeteoPoint>(meteoPoints, count, meteoPointParameters.PageNumber, meteoPointParameters.PageSize);

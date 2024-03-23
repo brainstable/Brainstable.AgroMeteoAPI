@@ -4,7 +4,7 @@
     {
         private const int MAX_PAGE_SIZE = 50;
 
-        private int pageSize;
+        private int pageSize = MAX_PAGE_SIZE;
         public int PageNumber { get; set; } = 1;
 
         public int PageSize 

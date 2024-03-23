@@ -24,6 +24,9 @@ namespace Brainstable.AgroMeteoAPI.Service
 
         public async Task<(IEnumerable<MeteoPointDto> meteoPoints, MetaData metaData)> GetAllDaysMeteoPointsAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges)
         {
+            if (!meteoPointParameters.ValidDateRange)
+                throw new MaxDateRangeBadRequestException();
+            
             await CheckIfMeteoStationExists(meteoStationId, trackChanges);
 
             var meteoPointsWithMetaData = await repository.MeteoPoint.GetAllDaysMeteoPointsAsync(meteoStationId, meteoPointParameters, trackChanges);

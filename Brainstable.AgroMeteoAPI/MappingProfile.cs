@@ -16,6 +16,8 @@ namespace Brainstable.AgroMeteoAPI
             CreateMap<MeteoPoint, MeteoPointDto>();
             CreateMap<MeteoPointForCreationDto, MeteoPoint>();
             CreateMap<MeteoPointForUpdateDto, MeteoPoint>().ReverseMap();
+
+            CreateMap<MeteoPoint, TemperatureParameter>();
         }
     }
 }
