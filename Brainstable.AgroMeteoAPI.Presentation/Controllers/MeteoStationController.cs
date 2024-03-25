@@ -1,9 +1,11 @@
-﻿using Brainstable.AgroMeteoAPI.Presentation.ActionFilters;
+﻿using System.Text.Json;
+using Brainstable.AgroMeteoAPI.Presentation.ActionFilters;
 using Brainstable.AgroMeteoAPI.Presentation.ModelBinders;
 using Brainstable.AgroMeteoAPI.Service.Contracts;
 using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 using Brainstable.AgroMeteoAPI.Shared.RequestParameters;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 {
@@ -26,14 +28,11 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMeteoStations([FromQuery] MeteoStationParameters meteoStationParameters)
         {
-            IEnumerable<MeteoStationDto> meteoStations = new List<MeteoStationDto>();
+            var pagedResult = await service.MeteoStationService.GetAllMeteoStationsAsync(meteoStationParameters: meteoStationParameters, trackChanges: false);
             
-            if (meteoStationParameters is null)
-                meteoStations = await service.MeteoStationService.GetAllMeteoStationsAsync(trackChanges: false);
-            else
-                meteoStations = await service.MeteoStationService.GetAllMeteoStationsAsync(meteoStationParameters: meteoStationParameters, trackChanges: false);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
 
-            return Ok(meteoStations);
+            return Ok(pagedResult.meteoStationDtos);
         }
 
         [HttpGet("{meteoStationId}", Name = "MeteoStationById")]

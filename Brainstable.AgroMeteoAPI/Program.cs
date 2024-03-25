@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.WebEncoders;
 using Microsoft.OpenApi.Models;
 using NLog;
 
@@ -38,6 +39,13 @@ builder.Services.AddSwaggerGen(x =>
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
+});
+
+builder.Services.Configure<WebEncoderOptions>(options =>
+{
+    options.TextEncoderSettings = new System
+        .Text.Encodings.Web
+        .TextEncoderSettings(System.Text.Unicode.UnicodeRanges.All);
 });
 
 builder.Services.AddControllers(config =>

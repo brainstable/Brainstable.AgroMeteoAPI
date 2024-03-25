@@ -1,5 +1,6 @@
 ﻿using Brainstable.AgroMeteoAPI.Contracts;
 using Brainstable.AgroMeteoAPI.Entities.Models;
+using Brainstable.AgroMeteoAPI.Repository.Extensions;
 using Brainstable.AgroMeteoAPI.Shared.RequestParameters;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,21 +15,14 @@ namespace Brainstable.AgroMeteoAPI.Repository
 
         public async Task<PagedList<MeteoPoint>> GetAllDaysMeteoPointsAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges)
         {
-            bool del(MeteoPoint x)
-            {
-                return 
-            }
-
-            
-            var meteoPoints = await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId) 
-                                                         && (x.Date >= meteoPointParameters.MinDate && x.Date <= meteoPointParameters.MaxDate), trackChanges)
-                .OrderBy(x => x.Date)
-                .Skip((meteoPointParameters.PageNumber - 1) * meteoPointParameters.PageSize)
-                .Take(meteoPointParameters.PageSize)
+            var meteoPoints = await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
+                .FilterBetweenDates(meteoPointParameters.MinDate, meteoPointParameters.MaxDate)
+                .Sort(meteoPointParameters.OrderBy)
+                .Paging(meteoPointParameters.PageNumber, meteoPointParameters.PageSize)
                 .ToListAsync();
 
-            var count = await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId) 
-                                                   && (x.Date >= meteoPointParameters.MinDate && x.Date <= meteoPointParameters.MaxDate), trackChanges)
+            var count = await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
+                .FilterBetweenDates(meteoPointParameters.MinDate, meteoPointParameters.MaxDate)
                 .CountAsync();
 
             return new PagedList<MeteoPoint>(meteoPoints, count, meteoPointParameters.PageNumber, meteoPointParameters.PageSize);

@@ -5,8 +5,8 @@ namespace Brainstable.AgroMeteoAPI.Service.Contracts
 {
     public interface IMeteoStationService
     {
-        Task<IEnumerable<MeteoStationDto>> GetAllMeteoStationsAsync(bool trackChanges);
-        Task<IEnumerable<MeteoStationDto>> GetAllMeteoStationsAsync(MeteoStationParameters meteoStationParameters, bool trackChanges);
+        //Task<IEnumerable<MeteoStationDto>> GetAllMeteoStationsAsync(bool trackChanges);
+        Task<(IEnumerable<MeteoStationDto> meteoStationDtos, MetaData metaData)> GetAllMeteoStationsAsync(MeteoStationParameters meteoStationParameters, bool trackChanges);
         Task<MeteoStationDto> GetMeteoStationAsync(string meteoStationId, bool trackChanges);
         Task<MeteoStationDto> CreateMeteoStationAsync(MeteoStationForCreationDto meteoStation);
         Task<IEnumerable<MeteoStationDto>> GetByIdsAsync(IEnumerable<string> ids, bool trackChanges);

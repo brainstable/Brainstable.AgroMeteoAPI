@@ -1,5 +1,6 @@
 ﻿using Brainstable.AgroMeteoAPI.Contracts;
 using Brainstable.AgroMeteoAPI.Entities.Models;
+using Brainstable.AgroMeteoAPI.Repository.Extensions;
 using Brainstable.AgroMeteoAPI.Shared.RequestParameters;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,18 +13,19 @@ namespace Brainstable.AgroMeteoAPI.Repository
         {
         }
 
-        public async Task<IEnumerable<MeteoStation>> GetAllMeteoStationsAsync(bool trackChanges) =>
-            await FindAll(trackChanges)
-                .OrderBy(x => x.Name)
+        //public async Task<IEnumerable<MeteoStation>> GetAllMeteoStationsAsync(bool trackChanges) =>
+        //    await FindAll(trackChanges)
+        //        .OrderBy(x => x.Name)
+        //        .ToListAsync();
+
+        public async Task<PagedList<MeteoStation>> GetAllMeteoStationsAsync(MeteoStationParameters meteoStationParameters, bool trackChanges)
+        {
+            var meteoStations = await FindAll(trackChanges)
+                .Search(meteoStationParameters.SearchTerm)
+                .Sort(meteoStationParameters.OrderBy)
                 .ToListAsync();
 
-        public async Task<IEnumerable<MeteoStation>> GetAllMeteoStationsAsync(MeteoStationParameters meteoStationParameters, bool trackChanges)
-        {
-            return await FindAll(trackChanges)
-                .OrderBy(x => x.Name)
-                .Skip((meteoStationParameters.PageNumber - 1) * meteoStationParameters.PageSize)
-                .Take(meteoStationParameters.PageSize)
-                .ToListAsync();
+            return PagedList<MeteoStation>.ToPagedList(meteoStations, meteoStationParameters.PageNumber, meteoStationParameters.PageSize);
         }
 
         public async Task<MeteoStation> GetMeteoStationAsync(string meteoStationId, bool trackChanges) =>
