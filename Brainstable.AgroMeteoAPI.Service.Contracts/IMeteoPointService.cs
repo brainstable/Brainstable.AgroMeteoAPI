@@ -1,4 +1,5 @@
-﻿using Brainstable.AgroMeteoAPI.Entities.Models;
+﻿using System.Dynamic;
+using Brainstable.AgroMeteoAPI.Entities.Models;
 using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 using Brainstable.AgroMeteoAPI.Shared.RequestParameters;
 
@@ -6,7 +7,7 @@ namespace Brainstable.AgroMeteoAPI.Service.Contracts
 {
     public interface IMeteoPointService
     {
-        Task<(IEnumerable<MeteoPointDto> meteoPoints, MetaData metaData)> GetAllDaysMeteoPointsAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges);
+        Task<(IEnumerable<ExpandoObject> meteoPoints, MetaData metaData)> GetAllDaysMeteoPointsAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges);
         Task<Dictionary<DateOnly, double?>> GetAllDaysTemperatureAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges);
         Task<MeteoPointDto> GetMeteoPointAsync(string meteoStationId, DateOnly date, bool trackChanges);
         Task<IEnumerable<MeteoPointDto>> GetDaysMeteoPointsAsync(string meteoStationId, DateOnly startDate, DateOnly endDate, bool trackChanges);
