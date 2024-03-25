@@ -6,4 +6,9 @@ public class MeteoPointParameters : RequestParameters
     public DateOnly MaxDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
     public bool ValidDateRange => MaxDate > MinDate;
+
+    public MeteoPointParameters()
+    {
+        OrderBy = "Date";
+    }
 }

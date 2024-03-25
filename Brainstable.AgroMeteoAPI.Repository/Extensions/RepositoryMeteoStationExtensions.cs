@@ -1,5 +1,10 @@
 ﻿using Brainstable.AgroMeteoAPI.Entities.Models;
 
+using System.Reflection;
+using System.Text;
+using System.Linq.Dynamic.Core;
+using Brainstable.AgroMeteoAPI.Repository.Extensions.Utility;
+
 namespace Brainstable.AgroMeteoAPI.Repository.Extensions;
 
 public static class RepositoryMeteoStationExtensions
@@ -24,5 +29,20 @@ public static class RepositoryMeteoStationExtensions
         }
 
         return meteoStations.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+    }
+
+    public static IQueryable<MeteoStation> Sort(this IQueryable<MeteoStation> meteoStations, string orderByQueryString)
+    {
+        if (string.IsNullOrEmpty(orderByQueryString))
+        {
+            return meteoStations.OrderBy(x => x.Name);
+        }
+
+        var orderQuery = OrderQueryBuilder.CreateOrderQuery<MeteoStation>(orderByQueryString);
+
+        if (string.IsNullOrWhiteSpace(orderQuery))
+            return meteoStations.OrderBy(x => x.Name);
+
+        return meteoStations.OrderBy(orderQuery);
     }
 }

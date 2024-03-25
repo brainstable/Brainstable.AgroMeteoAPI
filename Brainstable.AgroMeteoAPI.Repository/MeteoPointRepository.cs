@@ -17,7 +17,7 @@ namespace Brainstable.AgroMeteoAPI.Repository
         {
             var meteoPoints = await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
                 .FilterBetweenDates(meteoPointParameters.MinDate, meteoPointParameters.MaxDate)
-                .OrderBy(x => x.Date)
+                .Sort(meteoPointParameters.OrderBy)
                 .Paging(meteoPointParameters.PageNumber, meteoPointParameters.PageSize)
                 .ToListAsync();
 

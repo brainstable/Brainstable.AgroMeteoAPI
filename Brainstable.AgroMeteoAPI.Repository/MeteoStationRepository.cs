@@ -22,7 +22,7 @@ namespace Brainstable.AgroMeteoAPI.Repository
         {
             var meteoStations = await FindAll(trackChanges)
                 .Search(meteoStationParameters.SearchTerm)
-                .OrderBy(x => x.Name)
+                .Sort(meteoStationParameters.OrderBy)
                 .ToListAsync();
 
             return PagedList<MeteoStation>.ToPagedList(meteoStations, meteoStationParameters.PageNumber, meteoStationParameters.PageSize);
