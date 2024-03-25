@@ -12,5 +12,10 @@
             get => pageSize;
             set => pageSize = (value > MAX_PAGE_SIZE) ? MAX_PAGE_SIZE : value;
         }
+
+        public RequestParameters()
+        {
+            pageSize = 0;
+        }
     }
 }

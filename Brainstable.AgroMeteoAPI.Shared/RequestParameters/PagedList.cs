@@ -11,7 +11,7 @@ public class PagedList<T> : List<T>
             TotalCount = count,
             PageSize = pageSize,
             CurrentPage = pageNumber,
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize)
+            TotalPages = pageSize == 0 ? 0 : (int)Math.Ceiling(count / (double)pageSize)
         };
 
         AddRange(items);
@@ -20,6 +20,12 @@ public class PagedList<T> : List<T>
     public static PagedList<T> ToPagedList(IEnumerable<T> source, int pageNumber, int pageSize)
     {
         var count = source.Count();
+
+        if (pageSize == 0)
+        {
+            return new PagedList<T>(source.ToList(), count, pageNumber, pageSize);
+        }
+
         var items = source
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize).ToList();

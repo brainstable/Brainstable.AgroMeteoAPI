@@ -22,22 +22,22 @@ namespace Brainstable.AgroMeteoAPI.Service
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<MeteoStationDto>> GetAllMeteoStationsAsync(bool trackChanges)
+        //public async Task<IEnumerable<MeteoStationDto>> GetAllMeteoStationsAsync(bool trackChanges)
+        //{
+        //    var meteoStations = await repository.MeteoStation.GetAllMeteoStationsAsync(trackChanges);
+
+        //    var meteoStationsDto = mapper.Map<IEnumerable<MeteoStationDto>>(meteoStations);
+
+        //    return meteoStationsDto;
+        //}
+
+        public async Task<(IEnumerable<MeteoStationDto> meteoStationDtos, MetaData metaData)> GetAllMeteoStationsAsync(MeteoStationParameters meteoStationParameters, bool trackChanges)
         {
-            var meteoStations = await repository.MeteoStation.GetAllMeteoStationsAsync(trackChanges);
+            var pagedList = await repository.MeteoStation.GetAllMeteoStationsAsync(meteoStationParameters, trackChanges);
 
-            var meteoStationsDto = mapper.Map<IEnumerable<MeteoStationDto>>(meteoStations);
+            var meteoStationsDto = mapper.Map<IEnumerable<MeteoStationDto>>(pagedList);
 
-            return meteoStationsDto;
-        }
-
-        public async Task<IEnumerable<MeteoStationDto>> GetAllMeteoStationsAsync(MeteoStationParameters meteoStationParameters, bool trackChanges)
-        {
-            var meteoStations = await repository.MeteoStation.GetAllMeteoStationsAsync(meteoStationParameters, trackChanges);
-
-            var meteoStationsDto = mapper.Map<IEnumerable<MeteoStationDto>>(meteoStations);
-
-            return meteoStationsDto;
+            return (meteoStationsDto, pagedList.MetaData);
         }
 
         public async Task<MeteoStationDto> GetMeteoStationAsync(string meteoStationId, bool trackChanges)
