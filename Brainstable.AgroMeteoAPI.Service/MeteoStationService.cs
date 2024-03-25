@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Dynamic;
+using AutoMapper;
 
 using Brainstable.AgroMeteoAPI.Contracts;
 using Brainstable.AgroMeteoAPI.Entities.Exceptions;
@@ -14,12 +15,14 @@ namespace Brainstable.AgroMeteoAPI.Service
         private readonly IRepositoryManager repository;
         private readonly ILoggerManager logger;
         private readonly IMapper mapper;
+        private readonly IDataShaper<MeteoStationDto> dataShaper;
 
-        public MeteoStationService(IRepositoryManager repository, ILoggerManager logger, AutoMapper.IMapper mapper)
+        public MeteoStationService(IRepositoryManager repository, ILoggerManager logger, AutoMapper.IMapper mapper, IDataShaper<MeteoStationDto> dataShaper)
         {
             this.repository = repository;
             this.logger = logger;
             this.mapper = mapper;
+            this.dataShaper = dataShaper;
         }
 
         //public async Task<IEnumerable<MeteoStationDto>> GetAllMeteoStationsAsync(bool trackChanges)
@@ -31,13 +34,15 @@ namespace Brainstable.AgroMeteoAPI.Service
         //    return meteoStationsDto;
         //}
 
-        public async Task<(IEnumerable<MeteoStationDto> meteoStationDtos, MetaData metaData)> GetAllMeteoStationsAsync(MeteoStationParameters meteoStationParameters, bool trackChanges)
+        public async Task<(IEnumerable<ExpandoObject> meteoStationDtos, MetaData metaData)> GetAllMeteoStationsAsync(MeteoStationParameters meteoStationParameters, bool trackChanges)
         {
             var pagedList = await repository.MeteoStation.GetAllMeteoStationsAsync(meteoStationParameters, trackChanges);
 
             var meteoStationsDto = mapper.Map<IEnumerable<MeteoStationDto>>(pagedList);
 
-            return (meteoStationsDto, pagedList.MetaData);
+            var shapedData = dataShaper.ShapeData(meteoStationsDto, meteoStationParameters.Fields);
+
+            return (shapedData, pagedList.MetaData);
         }
 
         public async Task<MeteoStationDto> GetMeteoStationAsync(string meteoStationId, bool trackChanges)

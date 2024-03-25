@@ -3,7 +3,8 @@ using Brainstable.AgroMeteoAPI.LoggerService;
 using Brainstable.AgroMeteoAPI.Repository;
 using Brainstable.AgroMeteoAPI.Service;
 using Brainstable.AgroMeteoAPI.Service.Contracts;
-
+using Brainstable.AgroMeteoAPI.Service.DataShaping;
+using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace Brainstable.AgroMeteoAPI.Extensions
@@ -39,5 +40,11 @@ namespace Brainstable.AgroMeteoAPI.Extensions
             IConfiguration configuration) =>
                 services.AddDbContext<RepositoryContext>(opts =>
                     opts.UseNpgsql(configuration.GetConnectionString("npgsqlConnection")));
+
+        public static void ConfigureDataShapers(this IServiceCollection services)
+        {
+            services.AddScoped<IDataShaper<MeteoStationDto>, DataShaper<MeteoStationDto>>();
+            services.AddScoped<IDataShaper<MeteoPointDto>, DataShaper<MeteoPointDto>>();
+        }
     }
 }

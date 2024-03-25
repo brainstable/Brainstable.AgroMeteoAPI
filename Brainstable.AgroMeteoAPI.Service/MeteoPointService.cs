@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Dynamic;
+using AutoMapper;
 
 using Brainstable.AgroMeteoAPI.Contracts;
 using Brainstable.AgroMeteoAPI.Entities.Exceptions;
@@ -14,15 +15,17 @@ namespace Brainstable.AgroMeteoAPI.Service
         private readonly IRepositoryManager repository;
         private readonly ILoggerManager logger;
         private readonly IMapper mapper;
+        private readonly IDataShaper<MeteoPointDto> dataShaper;
 
-        public MeteoPointService(IRepositoryManager repository, ILoggerManager logger, AutoMapper.IMapper mapper)
+        public MeteoPointService(IRepositoryManager repository, ILoggerManager logger, AutoMapper.IMapper mapper, IDataShaper<MeteoPointDto> dataShaper)
         {
             this.repository = repository;
             this.logger = logger;
             this.mapper = mapper;
+            this.dataShaper = dataShaper;
         }
 
-        public async Task<(IEnumerable<MeteoPointDto> meteoPoints, MetaData metaData)> GetAllDaysMeteoPointsAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges)
+        public async Task<(IEnumerable<ExpandoObject> meteoPoints, MetaData metaData)> GetAllDaysMeteoPointsAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges)
         {
             if (!meteoPointParameters.ValidDateRange)
                 throw new MaxDateRangeBadRequestException();
@@ -33,7 +36,9 @@ namespace Brainstable.AgroMeteoAPI.Service
 
             var meteoPointsDto = mapper.Map<IEnumerable<MeteoPointDto>>(meteoPointsWithMetaData);
 
-            return (meteoPointsDto, meteoPointsWithMetaData.MetaData);
+            var shapedData = dataShaper.ShapeData(meteoPointsDto, meteoPointParameters.Fields);
+
+            return (shapedData, meteoPointsWithMetaData.MetaData);
         }
 
         public async Task<Dictionary<DateOnly, double?>> GetAllDaysTemperatureAsync(string meteoStationId, MeteoPointParameters meteoPointParameters, bool trackChanges)
