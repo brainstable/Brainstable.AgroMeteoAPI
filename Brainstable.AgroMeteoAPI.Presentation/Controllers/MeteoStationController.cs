@@ -5,7 +5,6 @@ using Brainstable.AgroMeteoAPI.Service.Contracts;
 using Brainstable.AgroMeteoAPI.Shared.DataTransferObjects;
 using Brainstable.AgroMeteoAPI.Shared.RequestParameters;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 {
@@ -24,6 +23,14 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 
         //    return Ok(meteoStations);
         //}
+
+        [HttpOptions]
+        public IActionResult GetMeteoStationsOptions()
+        {
+            Response.Headers.Add("Allow", "GET, OPTIONS, POST, PUT, DELETE");
+
+            return Ok();
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetMeteoStations([FromQuery] MeteoStationParameters meteoStationParameters)

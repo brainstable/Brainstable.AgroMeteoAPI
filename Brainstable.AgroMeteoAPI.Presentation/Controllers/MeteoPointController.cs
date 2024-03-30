@@ -20,6 +20,7 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         }
 
         [HttpGet]
+        [HttpHead]
         [Route("alldays")]
         public async Task<IActionResult> GetAllDaysMeteoPoints(string meteoStationId,
             [FromQuery] MeteoPointParameters meteoPointParameters)
