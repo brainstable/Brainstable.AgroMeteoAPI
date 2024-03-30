@@ -26,6 +26,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 builder.Services.AddScoped<ValidationFilterAttribute>();
+builder.Services.ConfigureVersioning();
 
 builder.Services.AddSwaggerGen(x =>
 {

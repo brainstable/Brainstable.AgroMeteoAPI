@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Asp.Versioning;
 using Brainstable.AgroMeteoAPI.Presentation.ActionFilters;
 using Brainstable.AgroMeteoAPI.Presentation.ModelBinders;
 using Brainstable.AgroMeteoAPI.Service.Contracts;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
 {
+    [ApiVersion("1.0")]
     [Route("meteostations")]
     [ApiController]
     public class MeteoStationController : ControllerBase
@@ -15,14 +17,6 @@ namespace Brainstable.AgroMeteoAPI.Presentation.Controllers
         private readonly IServiceManager service;
 
         public MeteoStationController(IServiceManager service) => this.service = service;
-
-        //[HttpGet]
-        //public async Task<IActionResult> GetMeteoStations()
-        //{
-        //    var meteoStations = await service.MeteoStationService.GetAllMeteoStationsAsync(trackChanges: false);
-
-        //    return Ok(meteoStations);
-        //}
 
         [HttpOptions]
         public IActionResult GetMeteoStationsOptions()

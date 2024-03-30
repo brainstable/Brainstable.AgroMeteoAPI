@@ -45,6 +45,15 @@ namespace Brainstable.AgroMeteoAPI.Service
             return (shapedData, pagedList.MetaData);
         }
 
+        public async Task<IEnumerable<MeteoStationDto>> GetAllMeteoStationsAsync(bool trackChanges)
+        {
+            var meteoStations = await repository.MeteoStation.GetAllMeteoStationsAsync(false);
+
+            var meteoStationDtos = mapper.Map<IEnumerable<MeteoStationDto>>(meteoStations);
+
+            return meteoStationDtos;
+        }
+
         public async Task<MeteoStationDto> GetMeteoStationAsync(string meteoStationId, bool trackChanges)
         {
             var meteoStation = await GetMeteoStationAndCheckIfItExists(meteoStationId, trackChanges);

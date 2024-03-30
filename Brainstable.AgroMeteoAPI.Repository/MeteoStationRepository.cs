@@ -28,6 +28,14 @@ namespace Brainstable.AgroMeteoAPI.Repository
             return PagedList<MeteoStation>.ToPagedList(meteoStations, meteoStationParameters.PageNumber, meteoStationParameters.PageSize);
         }
 
+        public async Task<IEnumerable<MeteoStation>> GetAllMeteoStationsAsync(bool trackChanges)
+        {
+            var meteoStations = await FindAll(trackChanges)
+                .ToListAsync();
+
+            return meteoStations;
+        }
+
         public async Task<MeteoStation> GetMeteoStationAsync(string meteoStationId, bool trackChanges) =>
             await FindByCondition(x => x.MeteoStationId.Equals(meteoStationId), trackChanges)
                 .SingleOrDefaultAsync();

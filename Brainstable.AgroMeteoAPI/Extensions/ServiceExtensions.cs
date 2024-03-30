@@ -1,4 +1,5 @@
-﻿using Brainstable.AgroMeteoAPI.Contracts;
+﻿using Asp.Versioning;
+using Brainstable.AgroMeteoAPI.Contracts;
 using Brainstable.AgroMeteoAPI.LoggerService;
 using Brainstable.AgroMeteoAPI.Repository;
 using Brainstable.AgroMeteoAPI.Service;
@@ -45,6 +46,17 @@ namespace Brainstable.AgroMeteoAPI.Extensions
         {
             services.AddScoped<IDataShaper<MeteoStationDto>, DataShaper<MeteoStationDto>>();
             services.AddScoped<IDataShaper<MeteoPointDto>, DataShaper<MeteoPointDto>>();
+        }
+
+        public static void ConfigureVersioning(this IServiceCollection services)
+        {
+            services.AddApiVersioning(opt =>
+                {
+                    opt.ReportApiVersions = true;
+                    opt.AssumeDefaultVersionWhenUnspecified = true;
+                    opt.DefaultApiVersion = new ApiVersion(1, 0);
+                }
+            ).AddMvc();
         }
     }
 }
